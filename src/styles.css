@@ -1,0 +1,361 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * CourseSmith design system: editorial, minimal, brand blue.
+ * All colors in oklch. Never hardcode colors in components.
+ */
+
+/* Extra-small breakpoint so layouts can adapt between 320px and 640px.
+   Must live in a plain @theme block: `@theme inline` does not register variants. */
+@theme {
+  --breakpoint-xs: 25rem;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+  --radius-3xl: calc(var(--radius) + 20px);
+
+  --font-display: "Nunito", "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-highlight: "Kalam", cursive, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ink: var(--ink);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --text-display: clamp(2.8rem, 7.2vw, 6rem);
+  --text-section: clamp(2rem, 4.4vw, 3.5rem);
+}
+
+:root {
+  --radius: 1.5rem;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2077 0.0398 265.75);
+  --surface: oklch(0.9842 0.0034 247.86);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2077 0.0398 265.75);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2077 0.0398 265.75);
+
+  /* deep navy */
+  --primary: oklch(0.2526 0.0951 265.09);
+  --primary-foreground: oklch(0.9736 0.0113 252.09);
+
+  /* signal blue */
+  --brand: oklch(0.6998 0.1532 242.88);
+  --brand-soft: oklch(0.8022 0.1038 238.74);
+
+  --secondary: oklch(0.9688 0.0175 234.49);
+  --secondary-foreground: oklch(0.2526 0.0951 265.09);
+
+  --muted: oklch(0.9842 0.0034 247.86);
+  --muted-foreground: oklch(0.4455 0.0374 257.28);
+
+  --accent: oklch(0.9688 0.0175 234.49);
+  --accent-foreground: oklch(0.2526 0.0951 265.09);
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.9842 0.0034 247.86);
+  --success: oklch(0.6859 0.1667 154.86);
+
+  --border: oklch(0.9439 0.0126 255.51);
+  --input: oklch(0.9439 0.0126 255.51);
+  --ring: oklch(0.6998 0.1532 242.88);
+  --ink: oklch(0.2077 0.0398 265.75);
+
+  --chart-1: oklch(0.6998 0.1532 242.88);
+  --chart-2: oklch(0.2526 0.0951 265.09);
+  --chart-3: oklch(0.8022 0.1038 238.74);
+  --chart-4: oklch(0.6859 0.1667 154.86);
+  --chart-5: oklch(0.4455 0.0374 257.28);
+
+  --shadow-soft:
+    0 1px 2px oklch(0.2526 0.0951 265.09 / 0.04),
+    0 12px 32px -12px oklch(0.2526 0.0951 265.09 / 0.1);
+  --shadow-lift:
+    0 2px 4px oklch(0.2526 0.0951 265.09 / 0.04),
+    0 28px 60px -24px oklch(0.2526 0.0951 265.09 / 0.22);
+  --shadow-glow:
+    0 0 0 1px oklch(0.6998 0.1532 242.88 / 0.22),
+    0 24px 70px -28px oklch(0.6998 0.1532 242.88 / 0.55);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-muted-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-brand-soft);
+    color: var(--color-primary);
+  }
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility shadow-lift {
+  box-shadow: var(--shadow-lift);
+}
+
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+/* Editorial eyebrow label */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-brand);
+}
+
+/* Subtle blueprint grid, brand-tinted */
+@utility blueprint {
+  background-image:
+    linear-gradient(to right, oklch(0.6998 0.1532 242.88 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.6998 0.1532 242.88 / 0.07) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/*
+ * Childlike hand-drawn zigzag: wobbly crayon strokes with uneven peaks,
+ * round caps and a turbulence filter so it reads as drawn, not generated.
+ */
+@utility zigzag {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='120' viewBox='0 0 240 120'%3E%3Cfilter id='w' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.028' numOctaves='2' seed='7'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='4'/%3E%3C/filter%3E%3Cg filter='url(%23w)' fill='none' stroke='%2338a9e8' stroke-width='5' stroke-linecap='round' stroke-linejoin='round' opacity='0.5'%3E%3Cpath d='M-18 32 L0 23 L24 11 L52 37 L80 9 L108 34 L136 12 L164 38 L192 10 L216 33 L240 23 L258 15.5'/%3E%3Cpath d='M-18 85.3 L0 77 L26 65 L50 92 L78 63 L106 88 L134 64 L162 91 L190 66 L218 89 L240 77 L258 67.2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 240px 120px;
+}
+
+@utility blueprint-fine {
+  background-image:
+    linear-gradient(to right, oklch(0.6998 0.1532 242.88 / 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.6998 0.1532 242.88 / 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Soft radial brand lighting */
+@utility radial-brand {
+  background-image: radial-gradient(
+    60% 55% at 50% 0%,
+    oklch(0.9688 0.0175 234.49 / 0.9) 0%,
+    transparent 70%
+  );
+}
+
+@utility glass {
+  background-color: oklch(1 0 0 / 0.72);
+  backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid oklch(0.9439 0.0126 255.51 / 0.9);
+}
+
+@utility glass-dark {
+  background-color: oklch(0.2526 0.0951 265.09 / 0.55);
+  backdrop-filter: blur(18px) saturate(1.3);
+  border: 1px solid oklch(1 0 0 / 0.1);
+}
+
+/*
+ * CTA hover: a colour panel wipes in from the left edge.
+ * No scale, no translate: the button never moves or changes size.
+ * Set --cta-fill on the element to choose the incoming colour.
+ */
+@utility cta-fill {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color 0.5s ease 0.1s,
+    border-color 0.7s cubic-bezier(0.33, 0, 0.15, 1);
+
+  /* The colour panel that sweeps across */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: var(--cta-fill, var(--color-primary));
+    transform: scaleX(0);
+    transform-origin: left center;
+    /* Slow, weighted ease: accelerates away from the left, settles at the right */
+    transition: transform 0.75s cubic-bezier(0.33, 0, 0.15, 1);
+  }
+
+  /* Leading-edge sheen that rides just ahead of the fill */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      100deg,
+      transparent 35%,
+      oklch(1 0 0 / 0.18) 50%,
+      transparent 65%
+    );
+    transform: translateX(-110%);
+    transition: transform 0.85s cubic-bezier(0.33, 0, 0.15, 1);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(110%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-fill,
+  .cta-fill::before,
+  .cta-fill::after {
+    transition-duration: 0.001ms;
+  }
+
+  /* The sheen is pure decoration: drop it entirely rather than flashing it */
+  .cta-fill::after {
+    display: none;
+  }
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+@utility text-display {
+  font-size: var(--text-display);
+  line-height: 0.98;
+  font-weight: 600;
+}
+
+@utility text-section {
+  font-size: var(--text-section);
+  line-height: 1.04;
+  font-weight: 600;
+}
+
+@utility marquee-track {
+  animation: marquee 38s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@utility draw-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.4s ease-in-out forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@utility font-highlight {
+  font-family: var(--font-highlight);
+}
+
+@utility caret {
+  animation: caret 1s steps(1) infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
