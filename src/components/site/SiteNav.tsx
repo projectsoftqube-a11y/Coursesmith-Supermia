@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const LINKS = [
-  { label: "Features", href: "#features" },
-  { label: "How It Works", href: "#workflow" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Features", href: "/#features" },
+  { label: "How It Works", href: "/#workflow" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 export function SiteNav() {
@@ -33,7 +33,7 @@ export function SiteNav() {
             condensed ? "glass shadow-soft" : "border border-transparent"
           }`}
         >
-          <a href="#top" className="group flex min-w-0 shrink items-center">
+          <a href="/#top" className="group flex min-w-0 shrink items-center">
             <img
               src="/logo.png"
               alt="CourseSmith"

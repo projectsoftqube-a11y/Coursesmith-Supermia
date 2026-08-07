@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, CheckCircle2, Mail, Globe, MapPin } from "lucide-react";
 import { Eyebrow } from "./Reveal";
 
@@ -82,20 +83,21 @@ export function FinaleSection() {
 }
 
 // Only sections that actually exist on the page: every href resolves to a real anchor.
+// Anchors are prefixed with "/" so they also resolve from the legal pages.
 const FOOTER_COLS = [
   {
     t: "Explore",
     l: [
-      { label: "Why CourseSmith", href: "#problem" },
-      { label: "How it works", href: "#workflow" },
+      { label: "Why CourseSmith", href: "/#problem" },
+      { label: "How it works", href: "/#workflow" },
     ],
   },
   {
     t: "Try it",
     l: [
-      { label: "Build a lesson", href: "#features" },
-      { label: "Make a quiz", href: "#features" },
-      { label: "Questions", href: "#faq" },
+      { label: "Build a lesson", href: "/#features" },
+      { label: "Make a quiz", href: "/#features" },
+      { label: "Questions", href: "/#faq" },
       { label: "Download brochure", href: "/CourseSmith.pdf" },
     ],
   },
@@ -224,7 +226,23 @@ export function SiteFooter() {
 
         {/* Legal bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 py-6 text-xs text-white/65">
-          <p>© {new Date().getFullYear()} StudyMate AI. All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <p>© {new Date().getFullYear()} StudyMate AI. All rights reserved.</p>
+            <span className="hidden h-3 w-px bg-white/20 sm:block" />
+            <Link
+              to="/privacy"
+              className="transition-colors hover:text-brand-soft hover:underline underline-offset-4"
+            >
+              Privacy Policy
+            </Link>
+            <span className="h-3 w-px bg-white/20" />
+            <Link
+              to="/terms"
+              className="transition-colors hover:text-brand-soft hover:underline underline-offset-4"
+            >
+              Terms of Service
+            </Link>
+          </div>
           <p>
             by{" "}
             <a
