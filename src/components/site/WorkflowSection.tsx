@@ -46,7 +46,25 @@ export function WorkflowSection() {
 
       <div className="mx-auto w-full max-w-[1140px] px-4 xs:px-6 md:px-10">
         {/* Header */}
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="relative mx-auto max-w-3xl text-center">
+          {/* Mascot: decorative, sits in the gutter left of the header column and is
+              bottom-aligned to it. Anchored to the header rather than the section
+              because the step cards below span the full container width. */}
+          <motion.img
+            src="/mascot-left.png"
+            alt=""
+            aria-hidden="true"
+            width={971}
+            height={1469}
+            loading="lazy"
+            decoding="async"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-70px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="pointer-events-none absolute right-full bottom-0 mr-3 hidden h-auto w-[120px] select-none xl:block 2xl:mr-5 2xl:w-[140px]"
+          />
+
           <div className="flex justify-center">
             <Eyebrow>Simple 3-Step Process</Eyebrow>
           </div>

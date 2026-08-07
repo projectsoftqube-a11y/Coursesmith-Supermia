@@ -48,6 +48,23 @@ export function FAQSection() {
         <div className="absolute top-1/2 left-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[140px]" />
       </div>
 
+      {/* Mascot: decorative, anchored bottom-right. Only shown from xl up, where the
+          centered max-w-3xl accordion leaves enough clear gutter to sit in. */}
+      <motion.img
+        src="/mascot.png"
+        alt=""
+        aria-hidden="true"
+        width={716}
+        height={1447}
+        loading="lazy"
+        decoding="async"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="pointer-events-none absolute bottom-0 right-4 hidden h-auto w-[140px] select-none xl:block 2xl:right-10 2xl:w-[168px]"
+      />
+
       <div className="mx-auto w-full max-w-[1100px] px-4 xs:px-6 md:px-10">
         {/* Centered Section Header */}
         <div className="mx-auto max-w-3xl text-center">
