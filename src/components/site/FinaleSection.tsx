@@ -215,6 +215,17 @@ export function SiteFooter() {
                     supermia.ai
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="https://supermia.ai/ai-coursesmith/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="flex items-start gap-2.5 text-sm break-words text-white/70 transition-colors hover:text-brand-soft"
+                  >
+                    <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+                    About CourseSmith on SuperMIA
+                  </a>
+                </li>
                 <li className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
                   2451 W Grapevine Mills Cir #547, Grapevine, TX 76051
@@ -227,7 +238,7 @@ export function SiteFooter() {
         {/* Legal bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 py-6 text-xs text-white/65">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <p>© {new Date().getFullYear()} StudyMate AI. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} CourseSmith by SuperMIA. All rights reserved.</p>
             <span className="hidden h-3 w-px bg-white/20 sm:block" />
             <Link
               to="/privacy"

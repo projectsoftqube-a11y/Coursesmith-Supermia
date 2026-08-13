@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { absoluteUrl } from "@/lib/seo";
 import { LegalLayout, LegalSection, LegalList, Term } from "@/components/site/LegalLayout";
 
 export const Route = createFileRoute("/privacy")({
@@ -17,10 +18,12 @@ export const Route = createFileRoute("/privacy")({
           "How CourseSmith collects, uses, shares and safeguards your information when you use our AI-powered teacher assistant services.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/logo.png" },
+      { property: "og:url", content: absoluteUrl("/privacy") },
+      { property: "og:image", content: absoluteUrl("/logo.png") },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "/logo.png" },
+      { name: "twitter:image", content: absoluteUrl("/logo.png") },
     ],
+    links: [{ rel: "canonical", href: absoluteUrl("/privacy") }],
   }),
   component: PrivacyPage,
 });

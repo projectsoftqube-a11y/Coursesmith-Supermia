@@ -1,0 +1,16 @@
+# Normalise line endings to LF in the repo and in the working tree.
+# Lovable's cloud builds write LF; without this, Windows checkouts get CRLF,
+# which breaks prettier/eslint and produces whole-file diffs where nothing changed.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.mp4 binary
+*.woff binary
+*.woff2 binary

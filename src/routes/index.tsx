@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { absoluteUrl } from "@/lib/seo";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Hero } from "@/components/site/Hero";
@@ -28,10 +29,12 @@ export const Route = createFileRoute("/")({
           "CourseSmith turns textbooks, notes and PDFs into complete lesson plans, quizzes, assignments and rubrics with AI. An AI teaching operating system by SuperMIA.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/logo.png" },
+      { property: "og:url", content: absoluteUrl("/") },
+      { property: "og:image", content: absoluteUrl("/logo.png") },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "/logo.png" },
+      { name: "twitter:image", content: absoluteUrl("/logo.png") },
     ],
+    links: [{ rel: "canonical", href: absoluteUrl("/") }],
   }),
   component: Index,
 });
