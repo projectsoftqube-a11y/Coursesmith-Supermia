@@ -6,6 +6,7 @@ import { Hero } from "@/components/site/Hero";
 import { ProblemSection } from "@/components/site/ProblemSection";
 import { UploadSection } from "@/components/site/UploadSection";
 import { WorkflowSection } from "@/components/site/WorkflowSection";
+import { DemoVideoSection } from "@/components/site/DemoVideoSection";
 import { BrochureSection } from "@/components/site/BrochureSection";
 import { FAQSection } from "@/components/site/FAQSection";
 import { FinaleSection, SiteFooter } from "@/components/site/FinaleSection";
@@ -48,6 +49,7 @@ function Index() {
       <ProblemSection />
       <UploadSection />
       <WorkflowSection />
+      <DemoVideoSection />
       <BrochureSection />
       <FAQSection />
       <FinaleSection />
