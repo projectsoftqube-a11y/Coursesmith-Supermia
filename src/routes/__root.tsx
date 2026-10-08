@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { absoluteUrl } from "../lib/seo";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -107,11 +108,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         property: "og:image",
-        content: "/logo.png",
+        content: absoluteUrl("/logo.png"),
       },
       {
         name: "twitter:image",
-        content: "/logo.png",
+        content: absoluteUrl("/logo.png"),
       },
     ],
     links: [

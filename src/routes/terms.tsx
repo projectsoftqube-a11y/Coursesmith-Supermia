@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { absoluteUrl } from "@/lib/seo";
 import { LegalLayout, LegalSection, LegalList, Term } from "@/components/site/LegalLayout";
 
 export const Route = createFileRoute("/terms")({
@@ -17,10 +18,12 @@ export const Route = createFileRoute("/terms")({
           "The Terms of Service governing your access to and use of CourseSmith, the AI teaching assistant platform by SuperMIA.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/logo.png" },
+      { property: "og:url", content: absoluteUrl("/terms") },
+      { property: "og:image", content: absoluteUrl("/logo.png") },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "/logo.png" },
+      { name: "twitter:image", content: absoluteUrl("/logo.png") },
     ],
+    links: [{ rel: "canonical", href: absoluteUrl("/terms") }],
   }),
   component: TermsPage,
 });
