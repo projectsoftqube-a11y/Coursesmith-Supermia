@@ -265,6 +265,16 @@ export function SiteFooter() {
               SuperMIA
             </a>{" "}
             · <span className="font-semibold text-white">Botfinity Inc.</span>
+            <span className="mx-2 text-white/20">|</span>
+            Design &amp; Develop by{" "}
+            <a
+              href="https://softqubes.com/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="font-semibold text-white transition-colors hover:text-brand-soft"
+            >
+              Softqube Technologies LLC
+            </a>
           </p>
         </div>
       </div>
