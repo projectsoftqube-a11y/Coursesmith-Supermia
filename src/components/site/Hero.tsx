@@ -1,5 +1,8 @@
+"use client";
+
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { ArrowUpRight, Play, GraduationCap, Wand2 } from "lucide-react";
+import Image from "next/image";
 
 export function Hero() {
   const mouseX = useMotionValue(0);
@@ -62,7 +65,7 @@ export function Hero() {
         />
 
         {/* Blueprint Grid Overlay */}
-        <div className="blueprint absolute inset-0 opacity-40 [mask-image:radial-gradient(80%_80%_at_50%_40%,black_30%,transparent_100%)]" />
+        <div className="absolute inset-0 blueprint [mask-image:radial-gradient(80%_80%_at_50%_40%,black_30%,transparent_100%)] opacity-40" />
       </div>
 
       <div className="relative mx-auto w-full max-w-[1360px] px-4 xs:px-6 md:px-10">
@@ -85,10 +88,10 @@ export function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="font-display mt-6 text-[1.75rem] font-extrabold tracking-tight text-ink xs:text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] leading-[1.12] sm:leading-[1.08]"
+              className="mt-6 font-display text-[1.75rem] leading-[1.12] font-extrabold tracking-tight text-ink xs:text-4xl sm:text-5xl sm:leading-[1.08] md:text-6xl lg:text-[3.75rem]"
             >
               <span className="block">Transform Any Subject Into</span>
-              <span className="block font-highlight bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text font-highlight text-transparent">
                 Complete Courses in Seconds.
               </span>
             </motion.h1>
@@ -118,7 +121,7 @@ export function Hero() {
               <a
                 href="#features"
                 style={{ ["--cta-fill" as string]: "var(--color-primary)" }}
-                className="cta-fill group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-border bg-card/90 px-5 py-3.5 text-sm font-medium text-primary backdrop-blur-md hover:border-brand/40 hover:text-white sm:w-auto sm:px-6"
+                className="group cta-fill inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-border bg-card/90 px-5 py-3.5 text-sm font-medium text-primary backdrop-blur-md hover:border-brand/40 hover:text-white sm:w-auto sm:px-6"
               >
                 <span className="grid h-6 w-6 place-items-center rounded-full bg-brand/10 text-brand transition-colors duration-300 group-hover:bg-white/20 group-hover:text-white">
                   <Play className="h-2.5 w-2.5 fill-current" />
@@ -134,29 +137,30 @@ export function Hero() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative group rounded-3xl border border-brand/20 bg-card/90 p-3 sm:p-4 shadow-lift backdrop-blur-xl"
+              className="group relative rounded-3xl border border-brand/20 bg-card/90 p-3 shadow-lift backdrop-blur-xl sm:p-4"
             >
               <div className="relative overflow-hidden rounded-2xl border border-border/60 shadow-soft">
-                <img
+                <Image
+                  sizes="(min-width: 1024px) 560px, 100vw"
                   width={1024}
                   height={1024}
-                  fetchPriority="high"
+                  priority
                   src="/hero-teacher.webp"
                   alt="Teacher empowered by CourseSmith AI"
-                  className="h-[260px] sm:h-[380px] md:h-[480px] w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  className="h-[260px] w-full object-cover object-top transition-transform duration-700 group-hover:scale-105 sm:h-[380px] md:h-[480px]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-card/10 to-transparent" />
                 {/* Floating Bottom Badge */}
-                <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/80 bg-card/95 p-3 shadow-soft backdrop-blur-md sm:bottom-4 sm:left-4 sm:right-4 sm:p-3.5">
+                <div className="absolute right-3 bottom-3 left-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/80 bg-card/95 p-3 shadow-soft backdrop-blur-md sm:right-4 sm:bottom-4 sm:left-4 sm:p-3.5">
                   <div className="flex items-center gap-3">
                     <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/10 text-brand">
                       <Wand2 className="h-4 w-4" />
                     </span>
                     <div>
-                      <p className="text-xs font-semibold text-ink leading-none">
+                      <p className="text-xs leading-none font-semibold text-ink">
                         Classroom Magic Enabled
                       </p>
-                      <p className="text-[11px] text-muted-foreground mt-1">
+                      <p className="mt-1 text-[11px] text-muted-foreground">
                         Empowering teachers with instant AI-crafted lessons
                       </p>
                     </div>

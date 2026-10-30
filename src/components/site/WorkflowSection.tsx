@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "motion/react";
 import { Eyebrow } from "./Reveal";
 import { FileText, Sparkles, Share2, Check, ArrowDown } from "lucide-react";
@@ -40,7 +42,7 @@ export function WorkflowSection() {
     <section id="workflow" className="relative overflow-hidden bg-background py-12 md:py-16">
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="blueprint absolute inset-0 opacity-30 [mask-image:radial-gradient(70%_60%_at_50%_40%,black,transparent)]" />
+        <div className="absolute inset-0 blueprint [mask-image:radial-gradient(70%_60%_at_50%_40%,black,transparent)] opacity-30" />
         <div className="absolute top-0 left-1/2 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-brand/[0.07] blur-[140px]" />
       </div>
 
@@ -69,10 +71,10 @@ export function WorkflowSection() {
             <Eyebrow>Simple 3-Step Process</Eyebrow>
           </div>
 
-          <h2 className="font-display mt-5 text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl">
+          <h2 className="mt-5 font-display text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl">
             From Blank Page to Complete Unit.
             <br />
-            <span className="font-highlight bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text font-highlight text-transparent">
               In 3 Simple Steps.
             </span>
           </h2>
@@ -121,7 +123,7 @@ export function WorkflowSection() {
                       {step.badge}
                     </span>
 
-                    <h3 className="font-display mt-3 text-xl font-extrabold text-ink sm:text-2xl">
+                    <h3 className="mt-3 font-display text-xl font-extrabold text-ink sm:text-2xl">
                       {step.title}
                     </h3>
 

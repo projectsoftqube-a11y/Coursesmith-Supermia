@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useInView, type Variants } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -89,7 +91,7 @@ export function Reveal({
 
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn("eyebrow inline-flex items-center gap-3", className)}>
+    <div className={cn("inline-flex items-center gap-3 eyebrow", className)}>
       <span className="h-px w-8 bg-brand/50" />
       <span>{children}</span>
       <span className="h-px w-8 bg-brand/50" />

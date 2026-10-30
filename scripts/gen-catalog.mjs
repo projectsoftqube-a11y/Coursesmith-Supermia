@@ -17,6 +17,12 @@ export const GROUP_FILES = [
   ["use-cases.ts", "USE_CASE_PAGES"],
   ["standards-a.ts", "STANDARDS_PAGES_A"],
   ["standards-b.ts", "STANDARDS_PAGES_B"],
+  ["standards-c.ts", "STANDARDS_PAGES_C"],
+  ["standards-d.ts", "STANDARDS_PAGES_D"],
+  ["standards-e.ts", "STANDARDS_PAGES_E"],
+  ["standards-f.ts", "STANDARDS_PAGES_F"],
+  ["standards-g.ts", "STANDARDS_PAGES_G"],
+  ["standards-h.ts", "STANDARDS_PAGES_H"],
   ["compare.ts", "COMPARE_PAGES"],
   ["resources.ts", "RESOURCE_PAGES"],
 ];

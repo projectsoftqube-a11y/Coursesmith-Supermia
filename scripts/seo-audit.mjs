@@ -166,7 +166,7 @@ for (const p of paths) {
 }
 for (const [t, ps] of titles)
   if (ps.length > 1) fail("titles", `duplicate "${t}" on ${ps.join(", ")}`);
-for (const [d, ps] of descs)
+for (const [, ps] of descs)
   if (ps.length > 1) fail("descriptions", `duplicate on ${ps.join(", ")}`);
 
 // 4. Trailing-slash and unknown URLs.

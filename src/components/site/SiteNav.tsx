@@ -1,10 +1,14 @@
+"use client";
+
 import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
-import { catalogGroup, standardsSplit, type CatalogEntry } from "@/content/catalog";
+import { catalogGroup, standardsNavEntries, type CatalogEntry } from "@/content/catalog";
 import { HUBS } from "@/content/hubs";
 import type { ContentGroup } from "@/content/types";
 import { APP_URL } from "@/lib/seo";
+import Link from "next/link";
+import Image from "next/image";
 
 type MenuDef = {
   group: ContentGroup;
@@ -15,14 +19,13 @@ type MenuDef = {
 };
 
 function menus(): MenuDef[] {
-  const { national, states } = standardsSplit();
   return [
     { group: "features", cols: "sm:grid-cols-2", items: catalogGroup("features") },
     { group: "use-cases", cols: "sm:grid-cols-3", items: catalogGroup("use-cases") },
     {
       group: "standards",
       cols: "sm:grid-cols-4",
-      items: [...national, ...states],
+      items: standardsNavEntries(),
       compact: true,
     },
     { group: "compare", cols: "sm:grid-cols-2", items: catalogGroup("compare") },
@@ -102,15 +105,15 @@ export function SiteNav() {
             condensed || active ? "glass shadow-soft" : "border border-transparent"
           }`}
         >
-          <a href="/" className="group flex min-w-0 shrink items-center">
-            <img
+          <Link href="/" className="group flex min-w-0 shrink items-center">
+            <Image
+              width={233}
+              height={36}
               src="/logo.png"
               alt="CourseSmith home"
-              width={1608}
-              height={248}
               className="h-7 w-auto max-w-[160px] object-contain transition-transform duration-300 group-hover:scale-105 xs:h-8 xs:max-w-none md:h-9"
             />
-          </a>
+          </Link>
 
           <ul className="hidden items-center gap-1 lg:flex">
             {MENUS.map((m) => {
@@ -189,7 +192,7 @@ export function SiteNav() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass mt-2 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-2xl p-3 lg:hidden"
+            className="mt-2 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-2xl glass p-3 lg:hidden"
           >
             <ul className="grid gap-1">
               {MENUS.map((m) => (
@@ -284,7 +287,7 @@ function MenuPanel({ menu, onNavigate }: { menu: MenuDef; onNavigate: () => void
       </ul>
       <div className="relative hidden overflow-hidden bg-primary p-6 text-white lg:block">
         <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-brand/35 blur-[80px]" />
-        <p className="eyebrow relative !text-brand-soft">{hub.eyebrow}</p>
+        <p className="relative eyebrow !text-brand-soft">{hub.eyebrow}</p>
         <p className="relative mt-3 font-display text-lg leading-snug font-extrabold">{hub.h1}</p>
         <p className="relative mt-2 text-xs leading-relaxed text-white/70">{hub.intro}</p>
         <a

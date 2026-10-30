@@ -55,7 +55,7 @@ export function SitePageView({ page, band }: { page: SitePage; band?: ReactNode 
         <Container>
           <Breadcrumbs crumbs={sitePageCrumbs(page)} />
           <div className="mt-8 grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 lg:col-span-7">
+            <div className="motion-safe:animate-in motion-safe:duration-700 motion-safe:slide-in-from-bottom-3 lg:col-span-7">
               <EyebrowPill>{page.eyebrow}</EyebrowPill>
               <h1 className="mt-5 font-display text-[2.125rem] leading-[1.08] font-extrabold tracking-tight text-ink xs:text-4xl sm:text-5xl lg:text-[3.4rem]">
                 {page.h1}

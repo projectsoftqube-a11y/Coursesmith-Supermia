@@ -1,6 +1,9 @@
+"use client";
+
 import { motion } from "motion/react";
 import { Eyebrow } from "./Reveal";
 import { BookOpen, HelpCircle, Award, Share2, Zap, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 
 const STACKED_FEATURES = [
   {
@@ -68,7 +71,7 @@ export function UploadSection() {
     <section id="features" className="relative bg-surface py-12 md:py-16">
       {/* Background Decorator Lights */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="blueprint absolute inset-0 opacity-25 [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)]" />
+        <div className="absolute inset-0 blueprint [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)] opacity-25" />
         <div className="absolute top-1/2 left-1/2 -z-10 h-[550px] w-[850px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[150px]" />
       </div>
 
@@ -79,9 +82,9 @@ export function UploadSection() {
             <Eyebrow>Complete Feature Suite</Eyebrow>
           </div>
 
-          <h2 className="font-display mt-5 text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl">
+          <h2 className="mt-5 font-display text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl">
             Everything Teachers Need. <br />
-            <span className="font-highlight bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text font-highlight text-transparent">
               One Complete Platform.
             </span>
           </h2>
@@ -100,7 +103,7 @@ export function UploadSection() {
 
               <div className="relative p-5 xs:p-7 sm:p-9">
                 <CellHead num={f1.number} icon={f1.icon} tone="dark" />
-                <h3 className="font-display mt-5 text-xl leading-tight font-extrabold text-white xs:text-2xl sm:text-4xl">
+                <h3 className="mt-5 font-display text-xl leading-tight font-extrabold text-white xs:text-2xl sm:text-4xl">
                   {f1.title}
                 </h3>
                 <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/70">{f1.desc}</p>
@@ -109,12 +112,12 @@ export function UploadSection() {
 
               <div className="relative mt-auto px-5 pb-5 xs:px-7 xs:pb-7 sm:px-9 sm:pb-9">
                 <div className="overflow-hidden rounded-2xl border border-white/15 shadow-soft">
-                  <img
+                  <Image
+                    sizes="(min-width: 768px) 60vw, 100vw"
                     width={1024}
                     height={1024}
                     src={f1.image}
                     alt={f1.title}
-                    loading="lazy"
                     className="h-[210px] w-full object-cover sm:h-[300px]"
                   />
                 </div>
@@ -126,19 +129,19 @@ export function UploadSection() {
           <BentoCell className="md:col-span-3 lg:col-span-5" delay={0.08}>
             <article className="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-border/80 bg-card shadow-soft">
               <div className="relative overflow-hidden rounded-t-3xl">
-                <img
+                <Image
+                  sizes="(min-width: 768px) 40vw, 100vw"
                   width={1024}
                   height={1024}
                   src={f2.image}
                   alt={f2.title}
-                  loading="lazy"
                   className="h-[170px] w-full object-cover"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
               </div>
               <div className="relative -mt-10 p-5 xs:p-6 sm:p-7">
                 <CellHead num={f2.number} icon={f2.icon} accent={f2.accent} />
-                <h3 className="font-display mt-4 text-xl leading-tight font-extrabold text-ink">
+                <h3 className="mt-4 font-display text-xl leading-tight font-extrabold text-ink">
                   {f2.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f2.desc}</p>
@@ -152,7 +155,7 @@ export function UploadSection() {
             <article className="relative flex h-full flex-col justify-center overflow-hidden rounded-3xl border border-border/80 bg-card p-5 shadow-soft xs:p-6 sm:p-7">
               <div className="relative">
                 <CellHead num={f3.number} icon={f3.icon} accent={f3.accent} />
-                <h3 className="font-display mt-4 text-xl leading-tight font-extrabold text-ink">
+                <h3 className="mt-4 font-display text-xl leading-tight font-extrabold text-ink">
                   {f3.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f3.desc}</p>
@@ -166,19 +169,19 @@ export function UploadSection() {
             <article className="relative flex h-full items-center gap-6 overflow-hidden rounded-3xl border border-border/80 bg-card p-5 shadow-soft xs:p-6 sm:p-7">
               <div className="relative flex-1">
                 <CellHead num={f4.number} icon={f4.icon} accent={f4.accent} />
-                <h3 className="font-display mt-4 text-xl leading-tight font-extrabold text-ink">
+                <h3 className="mt-4 font-display text-xl leading-tight font-extrabold text-ink">
                   {f4.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f4.desc}</p>
                 <Badges items={f4.badges} />
               </div>
               <div className="hidden w-40 shrink-0 overflow-hidden rounded-2xl border border-border/60 shadow-soft sm:block">
-                <img
+                <Image
+                  sizes="(min-width: 768px) 40vw, 100vw"
                   width={1024}
                   height={1024}
                   src={f4.image}
                   alt={f4.title}
-                  loading="lazy"
                   className="h-[160px] w-full object-cover"
                 />
               </div>
@@ -190,7 +193,7 @@ export function UploadSection() {
             <article className="relative flex h-full flex-col justify-center overflow-hidden rounded-3xl border border-brand/25 bg-gradient-to-br from-secondary via-card to-card p-5 shadow-soft xs:p-6 sm:p-7">
               <div className="relative">
                 <CellHead num={f5.number} icon={f5.icon} accent={f5.accent} />
-                <h3 className="font-display mt-4 text-xl leading-tight font-extrabold text-ink">
+                <h3 className="mt-4 font-display text-xl leading-tight font-extrabold text-ink">
                   {f5.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f5.desc}</p>
