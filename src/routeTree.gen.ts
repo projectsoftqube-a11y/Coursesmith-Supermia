@@ -10,12 +10,60 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as CompareIndexRouteImport } from './routes/compare/index'
+import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
+import { Route as FeaturesIndexRouteImport } from './routes/features/index'
+import { Route as FeaturesSlugRouteImport } from './routes/features/$slug'
+import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
+import { Route as ResourcesSlugRouteImport } from './routes/resources/$slug'
+import { Route as StandardsIndexRouteImport } from './routes/standards/index'
+import { Route as StandardsSlugRouteImport } from './routes/standards/$slug'
+import { Route as UseCasesIndexRouteImport } from './routes/use-cases/index'
+import { Route as UseCasesSlugRouteImport } from './routes/use-cases/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
+  id: '/llms-full.txt',
+  path: '/llms-full.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -23,40 +71,236 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompareIndexRoute = CompareIndexRouteImport.update({
+  id: '/compare/',
+  path: '/compare/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareSlugRoute = CompareSlugRouteImport.update({
+  id: '/compare/$slug',
+  path: '/compare/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
+  id: '/features/',
+  path: '/features/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
+  id: '/features/$slug',
+  path: '/features/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
+  id: '/resources/',
+  path: '/resources/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesSlugRoute = ResourcesSlugRouteImport.update({
+  id: '/resources/$slug',
+  path: '/resources/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StandardsIndexRoute = StandardsIndexRouteImport.update({
+  id: '/standards/',
+  path: '/standards/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StandardsSlugRoute = StandardsSlugRouteImport.update({
+  id: '/standards/$slug',
+  path: '/standards/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UseCasesIndexRoute = UseCasesIndexRouteImport.update({
+  id: '/use-cases/',
+  path: '/use-cases/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
+  id: '/use-cases/$slug',
+  path: '/use-cases/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/compare/$slug': typeof CompareSlugRoute
+  '/features/$slug': typeof FeaturesSlugRoute
+  '/resources/$slug': typeof ResourcesSlugRoute
+  '/standards/$slug': typeof StandardsSlugRoute
+  '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/compare/': typeof CompareIndexRoute
+  '/features/': typeof FeaturesIndexRoute
+  '/resources/': typeof ResourcesIndexRoute
+  '/standards/': typeof StandardsIndexRoute
+  '/use-cases/': typeof UseCasesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/compare/$slug': typeof CompareSlugRoute
+  '/features/$slug': typeof FeaturesSlugRoute
+  '/resources/$slug': typeof ResourcesSlugRoute
+  '/standards/$slug': typeof StandardsSlugRoute
+  '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/compare': typeof CompareIndexRoute
+  '/features': typeof FeaturesIndexRoute
+  '/resources': typeof ResourcesIndexRoute
+  '/standards': typeof StandardsIndexRoute
+  '/use-cases': typeof UseCasesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/compare/$slug': typeof CompareSlugRoute
+  '/features/$slug': typeof FeaturesSlugRoute
+  '/resources/$slug': typeof ResourcesSlugRoute
+  '/standards/$slug': typeof StandardsSlugRoute
+  '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/compare/': typeof CompareIndexRoute
+  '/features/': typeof FeaturesIndexRoute
+  '/resources/': typeof ResourcesIndexRoute
+  '/standards/': typeof StandardsIndexRoute
+  '/use-cases/': typeof UseCasesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/privacy' | '/terms'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/faq'
+    | '/llms-full.txt'
+    | '/llms.txt'
+    | '/pricing'
+    | '/privacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/terms'
+    | '/compare/$slug'
+    | '/features/$slug'
+    | '/resources/$slug'
+    | '/standards/$slug'
+    | '/use-cases/$slug'
+    | '/compare/'
+    | '/features/'
+    | '/resources/'
+    | '/standards/'
+    | '/use-cases/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/privacy' | '/terms'
-  id: '__root__' | '/' | '/privacy' | '/terms'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/faq'
+    | '/llms-full.txt'
+    | '/llms.txt'
+    | '/pricing'
+    | '/privacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/terms'
+    | '/compare/$slug'
+    | '/features/$slug'
+    | '/resources/$slug'
+    | '/standards/$slug'
+    | '/use-cases/$slug'
+    | '/compare'
+    | '/features'
+    | '/resources'
+    | '/standards'
+    | '/use-cases'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/faq'
+    | '/llms-full.txt'
+    | '/llms.txt'
+    | '/pricing'
+    | '/privacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/terms'
+    | '/compare/$slug'
+    | '/features/$slug'
+    | '/resources/$slug'
+    | '/standards/$slug'
+    | '/use-cases/$slug'
+    | '/compare/'
+    | '/features/'
+    | '/resources/'
+    | '/standards/'
+    | '/use-cases/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  CompareSlugRoute: typeof CompareSlugRoute
+  FeaturesSlugRoute: typeof FeaturesSlugRoute
+  ResourcesSlugRoute: typeof ResourcesSlugRoute
+  StandardsSlugRoute: typeof StandardsSlugRoute
+  UseCasesSlugRoute: typeof UseCasesSlugRoute
+  CompareIndexRoute: typeof CompareIndexRoute
+  FeaturesIndexRoute: typeof FeaturesIndexRoute
+  ResourcesIndexRoute: typeof ResourcesIndexRoute
+  StandardsIndexRoute: typeof StandardsIndexRoute
+  UseCasesIndexRoute: typeof UseCasesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,11 +312,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms-full.txt': {
+      id: '/llms-full.txt'
+      path: '/llms-full.txt'
+      fullPath: '/llms-full.txt'
+      preLoaderRoute: typeof LlmsFullDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -82,13 +382,101 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare/': {
+      id: '/compare/'
+      path: '/compare'
+      fullPath: '/compare/'
+      preLoaderRoute: typeof CompareIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/$slug': {
+      id: '/compare/$slug'
+      path: '/compare/$slug'
+      fullPath: '/compare/$slug'
+      preLoaderRoute: typeof CompareSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/': {
+      id: '/features/'
+      path: '/features'
+      fullPath: '/features/'
+      preLoaderRoute: typeof FeaturesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/$slug': {
+      id: '/features/$slug'
+      path: '/features/$slug'
+      fullPath: '/features/$slug'
+      preLoaderRoute: typeof FeaturesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources/': {
+      id: '/resources/'
+      path: '/resources'
+      fullPath: '/resources/'
+      preLoaderRoute: typeof ResourcesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources/$slug': {
+      id: '/resources/$slug'
+      path: '/resources/$slug'
+      fullPath: '/resources/$slug'
+      preLoaderRoute: typeof ResourcesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/standards/': {
+      id: '/standards/'
+      path: '/standards'
+      fullPath: '/standards/'
+      preLoaderRoute: typeof StandardsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/standards/$slug': {
+      id: '/standards/$slug'
+      path: '/standards/$slug'
+      fullPath: '/standards/$slug'
+      preLoaderRoute: typeof StandardsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/use-cases/': {
+      id: '/use-cases/'
+      path: '/use-cases'
+      fullPath: '/use-cases/'
+      preLoaderRoute: typeof UseCasesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/use-cases/$slug': {
+      id: '/use-cases/$slug'
+      path: '/use-cases/$slug'
+      fullPath: '/use-cases/$slug'
+      preLoaderRoute: typeof UseCasesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  LlmsFullDottxtRoute: LlmsFullDottxtRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  CompareSlugRoute: CompareSlugRoute,
+  FeaturesSlugRoute: FeaturesSlugRoute,
+  ResourcesSlugRoute: ResourcesSlugRoute,
+  StandardsSlugRoute: StandardsSlugRoute,
+  UseCasesSlugRoute: UseCasesSlugRoute,
+  CompareIndexRoute: CompareIndexRoute,
+  FeaturesIndexRoute: FeaturesIndexRoute,
+  ResourcesIndexRoute: ResourcesIndexRoute,
+  StandardsIndexRoute: StandardsIndexRoute,
+  UseCasesIndexRoute: UseCasesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

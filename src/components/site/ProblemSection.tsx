@@ -43,7 +43,11 @@ export function ProblemSection() {
           >
             <div className="relative overflow-hidden rounded-2xl border border-border/60">
               <img
-                src="/teacher-before.png"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+                src="/teacher-before.webp"
                 alt="Late night teacher burnout before CourseSmith"
                 className="h-[220px] xs:h-[280px] sm:h-[380px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -83,7 +87,11 @@ export function ProblemSection() {
           >
             <div className="relative overflow-hidden rounded-2xl border border-border/60">
               <img
-                src="/teacher-after.png"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+                src="/teacher-after.webp"
                 alt="Happy teacher in bright classroom with CourseSmith AI"
                 className="h-[220px] xs:h-[280px] sm:h-[380px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />

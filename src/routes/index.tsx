@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { absoluteUrl } from "@/lib/seo";
+import { pageHead, webPageNode } from "@/lib/seo";
+import { HOME_FAQS } from "@/content/home";
+import { SITE_UPDATED } from "@/content/hubs";
+
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Hero } from "@/components/site/Hero";
@@ -11,32 +14,26 @@ import { BrochureSection } from "@/components/site/BrochureSection";
 import { FAQSection } from "@/components/site/FAQSection";
 import { FinaleSection, SiteFooter } from "@/components/site/FinaleSection";
 
+const HOME_TITLE = "CourseSmith: AI Lesson Plans, Quizzes & Curriculum Tools";
+const HOME_DESCRIPTION =
+  "CourseSmith turns textbook PDFs into lesson plans, quizzes, assignments and term schedules with AI. A teaching assistant by SuperMIA. Start free.";
+
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "CourseSmith: AI Lesson Plans, Quizzes & Curriculum Tools" },
-      {
-        name: "description",
-        content:
-          "CourseSmith turns textbooks, notes and PDFs into complete lesson plans, quizzes, assignments and rubrics with AI. An AI teaching operating system by SuperMIA.",
-      },
-      {
-        property: "og:title",
-        content: "CourseSmith: AI Lesson Plans, Quizzes & Curriculum Tools",
-      },
-      {
-        property: "og:description",
-        content:
-          "CourseSmith turns textbooks, notes and PDFs into complete lesson plans, quizzes, assignments and rubrics with AI. An AI teaching operating system by SuperMIA.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: absoluteUrl("/") },
-      { property: "og:image", content: absoluteUrl("/logo.png") },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: absoluteUrl("/logo.png") },
-    ],
-    links: [{ rel: "canonical", href: absoluteUrl("/") }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/",
+      title: HOME_TITLE,
+      description: HOME_DESCRIPTION,
+      graph: [
+        webPageNode({
+          path: "/",
+          title: HOME_TITLE,
+          description: HOME_DESCRIPTION,
+          dateModified: SITE_UPDATED,
+          faqs: HOME_FAQS,
+        }),
+      ],
+    }),
   component: Index,
 });
 

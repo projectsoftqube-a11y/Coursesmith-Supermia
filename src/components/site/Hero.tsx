@@ -138,7 +138,10 @@ export function Hero() {
             >
               <div className="relative overflow-hidden rounded-2xl border border-border/60 shadow-soft">
                 <img
-                  src="/hero-teacher.png"
+                  width={1024}
+                  height={1024}
+                  fetchPriority="high"
+                  src="/hero-teacher.webp"
                   alt="Teacher empowered by CourseSmith AI"
                   className="h-[260px] sm:h-[380px] md:h-[480px] w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                 />

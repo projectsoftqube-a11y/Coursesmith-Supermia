@@ -1,34 +1,11 @@
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { Eyebrow } from "./Reveal";
-import { HelpCircle, ChevronDown, Mail } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { HOME_FAQS } from "@/content/home";
 
-const FAQS = [
-  {
-    q: "What do I need to upload to get started?",
-    a: "Just a textbook PDF. CourseSmith reads the file, extracts its chapters, sections and key topics, and turns them into a structured course outline you can build from. There is no setup, no template to fill in and no training required.",
-  },
-  {
-    q: "What exactly does a generated lesson plan include?",
-    a: "Each plan covers a full 45-minute class: a warm-up, direct instruction, interactive activities, homework assignments and project work.",
-  },
-  {
-    q: "How do the quizzes and answer keys work?",
-    a: "You choose how many questions you want and CourseSmith builds the quiz from your uploaded material, mixing multiple choice, short answer and long answer questions. Every quiz ships with a detailed answer key and explanations for each response.",
-  },
-  {
-    q: "What can the 24/7 AI teaching assistant help with?",
-    a: "Ask it to explain a tricky concept, brainstorm classroom activities, adapt material for a different grade level, or generate extra resources on the spot.",
-  },
-  {
-    q: "Does it keep my whole syllabus consistent?",
-    a: "Yes. CourseSmith connects chapters and topics across your entire syllabus into a live curriculum built on educational standards, so prerequisites stay in the right order and you do not end up with gaps between units.",
-  },
-  {
-    q: "How do I get my materials out of CourseSmith?",
-    a: "Export any lesson plan, quiz or assignment as a clean, print-ready document or PDF worksheet in one click, ready to hand out in class or share with your department.",
-  },
-];
+// Single source for the visible accordion and the FAQPage schema on the home route.
+const FAQS = HOME_FAQS;
 
 export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -51,7 +28,7 @@ export function FAQSection() {
       {/* Mascot: decorative, anchored bottom-right. Only shown from xl up, where the
           centered max-w-3xl accordion leaves enough clear gutter to sit in. */}
       <motion.img
-        src="/mascot.png"
+        src="/mascot.webp"
         alt=""
         aria-hidden="true"
         width={716}
@@ -95,6 +72,8 @@ export function FAQSection() {
               >
                 <button
                   onClick={() => toggle(i)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${i}`}
                   className="flex w-full items-center justify-between gap-3 p-4 text-left text-sm font-medium text-ink transition-colors hover:text-brand xs:p-5"
                 >
                   <span>{faq.q}</span>
@@ -105,20 +84,23 @@ export function FAQSection() {
                   />
                 </button>
 
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="border-t border-border/40 px-4 pb-4 pt-3 xs:px-5 xs:pb-5"
-                    >
+                {/* Always in the DOM so every answer is in the server HTML for crawlers;
+                    collapsed with a grid-rows transition instead of being unmounted. */}
+                <div
+                  id={`faq-answer-${i}`}
+                  inert={!isOpen}
+                  className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="border-t border-border/40 px-4 pb-4 pt-3 xs:px-5 xs:pb-5">
                       <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                         {faq.a}
                       </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                    </div>
+                  </div>
+                </div>
               </div>
             );
           })}

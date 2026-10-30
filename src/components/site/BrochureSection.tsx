@@ -109,7 +109,11 @@ export function BrochureSection() {
                         className="pointer-events-none absolute inset-x-0 top-[15%] bottom-[28%] overflow-hidden"
                       >
                         <img
-                          src="/section3-output.png"
+                          width={1024}
+                          height={1024}
+                          loading="lazy"
+                          decoding="async"
+                          src="/section3-output.webp"
                           alt=""
                           className="h-full w-full scale-[1.04] object-cover opacity-60"
                         />
