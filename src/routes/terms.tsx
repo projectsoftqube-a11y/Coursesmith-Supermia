@@ -1,30 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { absoluteUrl } from "@/lib/seo";
+import { breadcrumbNode, pageHead, webPageNode } from "@/lib/seo";
 import { LegalLayout, LegalSection, LegalList, Term } from "@/components/site/LegalLayout";
 
+const PATH = "/terms";
+const TITLE = "Terms of Service | CourseSmith AI Teaching Assistant";
+const DESCRIPTION =
+  "The Terms of Service governing your access to and use of CourseSmith, the AI teaching assistant platform by SuperMIA.";
+const UPDATED = "2026-08-07";
+const CRUMBS = [
+  { name: "Home", path: "/" },
+  { name: "Terms of Service", path: PATH },
+];
+
 export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Terms of Service | CourseSmith" },
-      {
-        name: "description",
-        content:
-          "The Terms of Service governing your access to and use of CourseSmith, the AI teaching assistant platform by SuperMIA.",
-      },
-      { property: "og:title", content: "Terms of Service | CourseSmith" },
-      {
-        property: "og:description",
-        content:
-          "The Terms of Service governing your access to and use of CourseSmith, the AI teaching assistant platform by SuperMIA.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: absoluteUrl("/terms") },
-      { property: "og:image", content: absoluteUrl("/logo.png") },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: absoluteUrl("/logo.png") },
-    ],
-    links: [{ rel: "canonical", href: absoluteUrl("/terms") }],
-  }),
+  head: () =>
+    pageHead({
+      path: PATH,
+      title: TITLE,
+      description: DESCRIPTION,
+      graph: [
+        webPageNode({
+          path: PATH,
+          title: TITLE,
+          description: DESCRIPTION,
+          crumbs: CRUMBS,
+          dateModified: UPDATED,
+        }),
+        breadcrumbNode(PATH, CRUMBS),
+      ],
+    }),
   component: TermsPage,
 });
 

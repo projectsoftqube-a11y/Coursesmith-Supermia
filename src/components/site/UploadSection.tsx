@@ -9,7 +9,7 @@ const STACKED_FEATURES = [
     title: "Instant 45-Min Lesson Plan Generator",
     subtitle: "Complete Units from Any Document",
     desc: "Transforms textbook chapters into 45-minute lesson plans with warm-ups, interactive activities, homework assignments, and project works.",
-    image: "/section3-output.png",
+    image: "/section3-output.webp",
     icon: BookOpen,
     accent: "text-brand border-brand/30 bg-brand/10",
     badges: ["Direct Instructions", "Homework Assignments", "Project Work"],
@@ -20,7 +20,7 @@ const STACKED_FEATURES = [
     title: "Differentiated Quiz & Assessment Builder",
     subtitle: "Auto-Leveled Quizzes with Answer Keys",
     desc: "Generates quizzes at any length you choose, each with detailed answer keys and explanations.",
-    image: "/section3-input.png",
+    image: "/section3-input.webp",
     icon: HelpCircle,
     accent: "text-indigo-500 border-indigo-500/30 bg-indigo-500/10",
     badges: ["Multiple Choice", "Short Answer", "Long Answer"],
@@ -31,7 +31,7 @@ const STACKED_FEATURES = [
     title: "24/7 AI Teaching Assistant",
     subtitle: "Transparent Criteria for Every Assignment",
     desc: "Ask questions, brainstorm activities, explain concepts, and generate classroom resources in seconds.",
-    image: "/teacher-after.png",
+    image: "/teacher-after.webp",
     icon: Award,
     accent: "text-emerald-500 border-emerald-500/30 bg-emerald-500/10",
     badges: ["Persona Based", "Quick Answers", "24/7 Availability"],
@@ -42,7 +42,7 @@ const STACKED_FEATURES = [
     title: "AI Knowledge & Curriculum Alignment",
     subtitle: "Zero Knowledge Gaps Across Your Syllabus",
     desc: "Connects topics across your entire syllabus into a live curriculum based on educational standards",
-    image: "/teacher-before.png",
+    image: "/teacher-before.webp",
     icon: Zap,
     accent: "text-cyan-500 border-cyan-500/30 bg-cyan-500/10",
     badges: ["Chapters", "Topics"],
@@ -53,7 +53,7 @@ const STACKED_FEATURES = [
     title: "1-Click LMS & PDF Multi-Export",
     subtitle: "Seamless Sync to Canvas, Google & Print",
     desc: "Export and download your generated lesson plans and quizzes as clean, print-ready documents.",
-    image: "/section3-output.png",
+    image: "/section3-output.webp",
     icon: Share2,
     accent: "text-purple-500 border-purple-500/30 bg-purple-500/10",
     badges: ["Docs", "PDF Worksheets"],
@@ -110,6 +110,8 @@ export function UploadSection() {
               <div className="relative mt-auto px-5 pb-5 xs:px-7 xs:pb-7 sm:px-9 sm:pb-9">
                 <div className="overflow-hidden rounded-2xl border border-white/15 shadow-soft">
                   <img
+                    width={1024}
+                    height={1024}
                     src={f1.image}
                     alt={f1.title}
                     loading="lazy"
@@ -125,6 +127,8 @@ export function UploadSection() {
             <article className="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-border/80 bg-card shadow-soft">
               <div className="relative overflow-hidden rounded-t-3xl">
                 <img
+                  width={1024}
+                  height={1024}
                   src={f2.image}
                   alt={f2.title}
                   loading="lazy"
@@ -170,6 +174,8 @@ export function UploadSection() {
               </div>
               <div className="hidden w-40 shrink-0 overflow-hidden rounded-2xl border border-border/60 shadow-soft sm:block">
                 <img
+                  width={1024}
+                  height={1024}
                   src={f4.image}
                   alt={f4.title}
                   loading="lazy"

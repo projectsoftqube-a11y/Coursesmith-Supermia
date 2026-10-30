@@ -10,7 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { absoluteUrl } from "../lib/seo";
+import { SITE_NAME } from "../lib/seo";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -35,7 +35,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -74,46 +74,17 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  // Page-level title, description, canonical, Open Graph and JSON-LD come from
+  // pageHead() in each route; only document-wide tags live here.
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CourseSmith: AI Lesson Plans, Quizzes & Curriculum Tools" },
-      {
-        name: "description",
-        content:
-          "CourseSmith turns textbooks, notes and PDFs into complete lesson plans, quizzes, assignments and rubrics with AI. An AI teaching operating system by SuperMIA.",
-      },
-      { name: "author", content: "Lovable" },
-      {
-        property: "og:title",
-        content: "CourseSmith: AI Lesson Plans, Quizzes & Curriculum Tools",
-      },
-      {
-        property: "og:description",
-        content:
-          "CourseSmith turns textbooks, notes and PDFs into complete lesson plans, quizzes, assignments and rubrics with AI. An AI teaching operating system by SuperMIA.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
-      {
-        name: "twitter:title",
-        content: "CourseSmith: AI Lesson Plans, Quizzes & Curriculum Tools",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "CourseSmith turns textbooks, notes and PDFs into complete lesson plans, quizzes, assignments and rubrics with AI. An AI teaching operating system by SuperMIA.",
-      },
-      {
-        property: "og:image",
-        content: absoluteUrl("/logo.png"),
-      },
-      {
-        name: "twitter:image",
-        content: absoluteUrl("/logo.png"),
-      },
+      { name: "theme-color", content: "#0b1d51" },
+      { name: "application-name", content: SITE_NAME },
+      { name: "apple-mobile-web-app-title", content: SITE_NAME },
+      { name: "format-detection", content: "telephone=no" },
+      { title: `${SITE_NAME}: AI Lesson Plans, Quizzes & Curriculum Tools` },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -126,9 +97,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
-      { rel: "shortcut icon", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: "/icon-192.png" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/site.webmanifest" },
     ],
   }),
   shellComponent: RootShell,

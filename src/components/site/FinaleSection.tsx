@@ -2,6 +2,9 @@ import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, CheckCircle2, Mail, Globe, MapPin } from "lucide-react";
 import { Eyebrow } from "./Reveal";
+import { catalogGroup, standardsSplit } from "@/content/catalog";
+import { HUBS } from "@/content/hubs";
+import type { ContentGroup } from "@/content/types";
 
 export function FinaleSection() {
   return (
@@ -59,7 +62,11 @@ export function FinaleSection() {
             <div className="lg:col-span-5">
               <div className="relative overflow-hidden rounded-2xl border border-border/60 shadow-soft">
                 <img
-                  src="/finale-teacher.png"
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  decoding="async"
+                  src="/finale-teacher.webp"
                   alt="Happy teacher using CourseSmith AI copilot"
                   className="h-[300px] sm:h-[360px] w-full object-cover"
                 />
@@ -82,26 +89,36 @@ export function FinaleSection() {
   );
 }
 
-// Only sections that actually exist on the page: every href resolves to a real anchor.
-// Anchors are prefixed with "/" so they also resolve from the legal pages.
-const FOOTER_COLS = [
-  {
-    t: "Explore",
-    l: [
-      { label: "Why CourseSmith", href: "/#problem" },
-      { label: "How it works", href: "/#workflow" },
-    ],
-  },
-  {
-    t: "Try it",
-    l: [
-      { label: "Build a lesson", href: "/#features" },
-      { label: "Make a quiz", href: "/#features" },
-      { label: "Questions", href: "/#faq" },
-      { label: "Download brochure", href: "/CourseSmith.pdf" },
-    ],
-  },
-];
+type FooterLink = { label: string; href: string };
+
+/** Link directory: every hub and page, so each URL is reachable from every page. */
+function footerCols(): { t: string; href: string; l: FooterLink[] }[] {
+  const toLinks = (g: ContentGroup): FooterLink[] =>
+    catalogGroup(g).map((e) => ({ label: e.label, href: e.path }));
+  const { national, states } = standardsSplit();
+  return [
+    { t: HUBS.features.label, href: HUBS.features.path, l: toLinks("features") },
+    { t: HUBS["use-cases"].label, href: HUBS["use-cases"].path, l: toLinks("use-cases") },
+    {
+      t: HUBS.standards.label,
+      href: HUBS.standards.path,
+      l: [...national, ...states].map((e) => ({ label: e.label, href: e.path })),
+    },
+    { t: HUBS.compare.label, href: HUBS.compare.path, l: toLinks("compare") },
+    { t: HUBS.resources.label, href: HUBS.resources.path, l: toLinks("resources") },
+    {
+      t: "Company",
+      href: "/about",
+      l: [
+        { label: "About CourseSmith", href: "/about" },
+        { label: "Pricing", href: "/pricing" },
+        { label: "Contact", href: "/contact" },
+        { label: "How it works", href: "/#workflow" },
+        { label: "FAQ", href: "/faq" },
+      ],
+    },
+  ];
+}
 
 export function SiteFooter() {
   return (
@@ -153,32 +170,75 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Brand + link columns */}
-        <div className="grid gap-10 py-10 md:grid-cols-[1.3fr_2fr]">
+        {/* Brand + link directory */}
+        <div className="grid gap-10 py-10 lg:grid-cols-[1fr_3.4fr]">
           <div>
             <img
               src="/logo.png"
               alt="CourseSmith"
+              width={1608}
+              height={248}
+              loading="lazy"
               className="h-8 w-auto object-contain brightness-0 invert"
             />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
               CourseSmith is the AI teaching operating system designed by SuperMIA to give teachers
               their time back.
             </p>
+            <ul className="mt-6 space-y-3">
+              <li>
+                <a
+                  href="mailto:hello@supermia.ai"
+                  className="flex items-start gap-2.5 text-sm break-words text-white/70 transition-colors hover:text-brand-soft"
+                >
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+                  hello@supermia.ai
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://supermia.ai"
+                  target="_blank"
+                  rel="noopener"
+                  className="flex items-start gap-2.5 text-sm break-words text-white/70 transition-colors hover:text-brand-soft"
+                >
+                  <Globe className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+                  supermia.ai
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://supermia.ai/ai-coursesmith/"
+                  target="_blank"
+                  rel="noopener"
+                  className="flex items-start gap-2.5 text-sm break-words text-white/70 transition-colors hover:text-brand-soft"
+                >
+                  <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+                  CourseSmith on SuperMIA
+                </a>
+              </li>
+              <li className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+                2451 W Grapevine Mills Cir #547, Grapevine, TX 76051
+              </li>
+            </ul>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {FOOTER_COLS.map((c) => (
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-6">
+            {footerCols().map((c) => (
               <div key={c.t}>
-                <p className="text-[11px] font-bold tracking-[0.16em] text-white uppercase">
+                <a
+                  href={c.href}
+                  className="text-[11px] font-bold tracking-[0.16em] text-white uppercase transition-colors hover:text-brand-soft"
+                >
                   {c.t}
-                </p>
-                <ul className="mt-4 space-y-2.5">
+                </a>
+                <ul className="mt-4 space-y-2">
                   {c.l.map((l) => (
-                    <li key={l.label}>
+                    <li key={l.href}>
                       <a
                         href={l.href}
-                        className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-brand-soft"
+                        className="group inline-flex items-center gap-1.5 text-[13px] leading-snug text-white/65 transition-colors hover:text-brand-soft"
                       >
                         <span className="h-px w-0 bg-brand-soft transition-all duration-300 group-hover:w-3" />
                         {l.label}
@@ -188,51 +248,7 @@ export function SiteFooter() {
                 </ul>
               </div>
             ))}
-
-            {/* Get in touch */}
-            <div>
-              <p className="text-[11px] font-bold tracking-[0.16em] text-white uppercase">
-                Get in touch
-              </p>
-              <ul className="mt-4 space-y-3">
-                <li>
-                  <a
-                    href="mailto:hello@supermia.ai"
-                    className="flex items-start gap-2.5 text-sm break-words text-white/70 transition-colors hover:text-brand-soft"
-                  >
-                    <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
-                    hello@supermia.ai
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://supermia.ai"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="flex items-start gap-2.5 text-sm break-words text-white/70 transition-colors hover:text-brand-soft"
-                  >
-                    <Globe className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
-                    supermia.ai
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://supermia.ai/ai-coursesmith/"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="flex items-start gap-2.5 text-sm break-words text-white/70 transition-colors hover:text-brand-soft"
-                  >
-                    <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
-                    About CourseSmith on SuperMIA
-                  </a>
-                </li>
-                <li className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
-                  2451 W Grapevine Mills Cir #547, Grapevine, TX 76051
-                </li>
-              </ul>
-            </div>
-          </div>
+          </nav>
         </div>
 
         {/* Legal bar */}

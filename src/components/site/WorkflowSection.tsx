@@ -51,7 +51,7 @@ export function WorkflowSection() {
               bottom-aligned to it. Anchored to the header rather than the section
               because the step cards below span the full container width. */}
           <motion.img
-            src="/mascot-left.png"
+            src="/mascot-left.webp"
             alt=""
             aria-hidden="true"
             width={971}

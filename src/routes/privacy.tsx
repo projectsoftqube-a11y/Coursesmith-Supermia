@@ -1,30 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { absoluteUrl } from "@/lib/seo";
+import { breadcrumbNode, pageHead, webPageNode } from "@/lib/seo";
 import { LegalLayout, LegalSection, LegalList, Term } from "@/components/site/LegalLayout";
 
+const PATH = "/privacy";
+const TITLE = "Privacy Policy | CourseSmith AI Teaching Assistant";
+const DESCRIPTION =
+  "How CourseSmith collects, uses, shares and safeguards your information when you use our AI-powered teacher assistant services.";
+const UPDATED = "2026-08-07";
+const CRUMBS = [
+  { name: "Home", path: "/" },
+  { name: "Privacy Policy", path: PATH },
+];
+
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy | CourseSmith" },
-      {
-        name: "description",
-        content:
-          "How CourseSmith collects, uses, shares and safeguards your information when you use our AI-powered teacher assistant services.",
-      },
-      { property: "og:title", content: "Privacy Policy | CourseSmith" },
-      {
-        property: "og:description",
-        content:
-          "How CourseSmith collects, uses, shares and safeguards your information when you use our AI-powered teacher assistant services.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: absoluteUrl("/privacy") },
-      { property: "og:image", content: absoluteUrl("/logo.png") },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: absoluteUrl("/logo.png") },
-    ],
-    links: [{ rel: "canonical", href: absoluteUrl("/privacy") }],
-  }),
+  head: () =>
+    pageHead({
+      path: PATH,
+      title: TITLE,
+      description: DESCRIPTION,
+      graph: [
+        webPageNode({
+          path: PATH,
+          title: TITLE,
+          description: DESCRIPTION,
+          crumbs: CRUMBS,
+          dateModified: UPDATED,
+        }),
+        breadcrumbNode(PATH, CRUMBS),
+      ],
+    }),
   component: PrivacyPage,
 });
 
