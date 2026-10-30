@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Eyebrow } from "./Reveal";
@@ -17,11 +19,11 @@ export function FAQSection() {
   return (
     <section
       id="faq"
-      className="relative overflow-hidden bg-surface py-12 md:py-16 border-b border-border/50"
+      className="relative overflow-hidden border-b border-border/50 bg-surface py-12 md:py-16"
     >
       {/* Background Lighting */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="blueprint absolute inset-0 opacity-25 [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)]" />
+        <div className="absolute inset-0 blueprint [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)] opacity-25" />
         <div className="absolute top-1/2 left-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[140px]" />
       </div>
 
@@ -39,7 +41,7 @@ export function FAQSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="pointer-events-none absolute bottom-0 right-4 hidden h-auto w-[140px] select-none xl:block 2xl:right-10 2xl:w-[168px]"
+        className="pointer-events-none absolute right-4 bottom-0 hidden h-auto w-[140px] select-none xl:block 2xl:right-10 2xl:w-[168px]"
       />
 
       <div className="mx-auto w-full max-w-[1100px] px-4 xs:px-6 md:px-10">
@@ -49,9 +51,9 @@ export function FAQSection() {
             <Eyebrow>Got Questions?</Eyebrow>
           </div>
 
-          <h2 className="font-display mt-5 text-3xl font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl leading-[1.1]">
+          <h2 className="mt-5 font-display text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl">
             Frequently Asked Questions. <br />
-            <span className="font-highlight bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text font-highlight text-transparent">
               Everything You Need to Know.
             </span>
           </h2>
@@ -62,13 +64,13 @@ export function FAQSection() {
         </div>
 
         {/* FAQ Accordion List */}
-        <div className="mt-7 space-y-4 max-w-3xl mx-auto">
+        <div className="mx-auto mt-7 max-w-3xl space-y-4">
           {FAQS.map((faq, i) => {
             const isOpen = openIndex === i;
             return (
               <div
                 key={faq.q}
-                className="rounded-2xl border border-border/80 bg-card shadow-soft overflow-hidden transition-all"
+                className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-soft transition-all"
               >
                 <button
                   onClick={() => toggle(i)}
@@ -94,8 +96,8 @@ export function FAQSection() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <div className="border-t border-border/40 px-4 pb-4 pt-3 xs:px-5 xs:pb-5">
-                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    <div className="border-t border-border/40 px-4 pt-3 pb-4 xs:px-5 xs:pb-5">
+                      <p className="text-xs leading-relaxed text-muted-foreground sm:text-sm">
                         {faq.a}
                       </p>
                     </div>

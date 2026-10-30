@@ -33,8 +33,8 @@ export function formatDate(iso: string): string {
 export function HeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <div className="zigzag absolute -inset-24 -rotate-6 opacity-35 [mask-image:linear-gradient(115deg,black_0%,black_14%,transparent_42%)]" />
-      <div className="blueprint absolute inset-0 opacity-30 [mask-image:radial-gradient(75%_65%_at_50%_40%,black,transparent)]" />
+      <div className="absolute -inset-24 -rotate-6 zigzag [mask-image:linear-gradient(115deg,black_0%,black_14%,transparent_42%)] opacity-35" />
+      <div className="absolute inset-0 blueprint [mask-image:radial-gradient(75%_65%_at_50%_40%,black,transparent)] opacity-30" />
       <div className="absolute -top-40 left-1/2 h-[460px] w-[820px] -translate-x-1/2 rounded-full bg-brand/12 blur-[140px]" />
       <div className="absolute -right-32 bottom-0 h-[320px] w-[420px] rounded-full bg-indigo-400/10 blur-[120px]" />
     </div>
@@ -81,7 +81,7 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 
 export function EyebrowPill({ children }: { children: ReactNode }) {
   return (
-    <span className="eyebrow inline-flex items-center gap-2 rounded-full border border-brand/25 bg-card px-4 py-1.5 shadow-soft">
+    <span className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-card px-4 py-1.5 eyebrow text-brand-strong! shadow-soft">
       <span className="h-1.5 w-1.5 rounded-full bg-brand" />
       {children}
     </span>
@@ -93,7 +93,7 @@ export function AnswerBlock({ text, label = "Quick answer" }: { text: string; la
   return (
     <div className="relative mt-7 overflow-hidden rounded-2xl border border-brand/25 bg-card/95 p-5 shadow-soft backdrop-blur sm:p-6">
       <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-brand via-sky-500 to-indigo-600" />
-      <p className="eyebrow">{label}</p>
+      <p className="eyebrow text-brand-strong!">{label}</p>
       <p className="answer-block mt-2 text-base leading-relaxed text-ink sm:text-[1.0625rem]">
         {text}
       </p>
@@ -160,7 +160,7 @@ export function KeyTakeaways({
       className="relative overflow-hidden rounded-3xl bg-primary p-6 text-primary-foreground shadow-lift sm:p-8"
     >
       <div className="pointer-events-none absolute inset-0">
-        <div className="zigzag absolute -inset-24 -rotate-6 opacity-20 [mask-image:linear-gradient(200deg,black_0%,black_30%,transparent_70%)]" />
+        <div className="absolute -inset-24 -rotate-6 zigzag [mask-image:linear-gradient(200deg,black_0%,black_30%,transparent_70%)] opacity-20" />
         <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-brand/30 blur-[90px]" />
       </div>
       <div className="relative">
@@ -188,7 +188,7 @@ export function KeyTakeaways({
 export function Definition({ term, text }: { term: string; text: string }) {
   return (
     <dl className="rounded-2xl border border-border/80 bg-surface p-5 sm:p-6">
-      <dt className="eyebrow">Definition: {term}</dt>
+      <dt className="eyebrow text-brand-strong!">Definition: {term}</dt>
       <dd className="mt-2 text-base leading-relaxed text-ink">{text}</dd>
     </dl>
   );
@@ -386,7 +386,7 @@ export function LinkCard({
         {title}
       </Heading>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{blurb}</p>
-      <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
+      <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-strong">
         Open {title}
         <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
       </span>
@@ -434,12 +434,12 @@ export function CtaBand({
       <Container>
         <div className="relative overflow-hidden rounded-3xl border border-brand/30 bg-card p-7 shadow-lift sm:p-12">
           <div className="pointer-events-none absolute inset-0">
-            <div className="zigzag absolute -inset-24 rotate-3 opacity-50 [mask-image:linear-gradient(295deg,black_0%,black_22%,transparent_58%)]" />
-            <div className="blueprint absolute inset-0 opacity-25 [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)]" />
+            <div className="absolute -inset-24 rotate-3 zigzag [mask-image:linear-gradient(295deg,black_0%,black_22%,transparent_58%)] opacity-50" />
+            <div className="absolute inset-0 blueprint [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)] opacity-25" />
           </div>
           <div className="relative grid items-center gap-8 lg:grid-cols-12">
             <div className="lg:col-span-8">
-              <p className="eyebrow">Start free</p>
+              <p className="eyebrow text-brand-strong!">Start free</p>
               <h2 className="mt-3 font-display text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-4xl">
                 {title}
               </h2>

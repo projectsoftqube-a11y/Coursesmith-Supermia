@@ -1,3 +1,7 @@
+import type { Metadata } from "next";
+
+import { ogImagePath } from "./og-path";
+
 /**
  * Public origin this marketing site is served from.
  *
@@ -5,12 +9,12 @@
  * do not resolve site-relative paths, so `/logo.png` silently yields no preview
  * image. The app itself lives on the `app.` subdomain; this is the marketing site.
  *
- * Override with VITE_SITE_URL on previews/staging so they never emit production
+ * Override with NEXT_PUBLIC_SITE_URL on previews/staging so they never emit production
  * canonicals; any origin other than production is also marked noindex.
  */
 export const PRODUCTION_URL = "https://coursesmith.supermia.ai";
 
-const envSiteUrl = import.meta.env["VITE_SITE_URL"] as string | undefined;
+const envSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const SITE_URL = (envSiteUrl || PRODUCTION_URL).replace(/\/+$/, "");
 
@@ -213,7 +217,7 @@ export function webPageNode(input: WebPageNodeInput): JsonLd {
 }
 
 // ---------------------------------------------------------------------------
-// <head> builder. Every route goes through this so metadata logic lives once.
+// Page metadata + JSON-LD. Every route goes through this so the logic lives once.
 // ---------------------------------------------------------------------------
 
 export type HeadInput = {
@@ -226,7 +230,11 @@ export type HeadInput = {
   noindex?: boolean;
 };
 
-const ROBOTS_INDEX = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+export type PageHead = {
+  metadata: Metadata;
+  /** The page's full @graph, rendered by <JsonLd>. */
+  jsonLd: JsonLd;
+};
 
 export function pageHead({
   path,
@@ -235,36 +243,50 @@ export function pageHead({
   ogType = "website",
   graph = [],
   noindex,
-}: HeadInput) {
+}: HeadInput): PageHead {
   const url = absoluteUrl(path);
-  const image = absoluteUrl(OG_IMAGE.path);
+  // Each page has its own card (app/og/[slug]); the site-wide OG_IMAGE stays
+  // the primaryImageOfPage in the entity graph.
+  const image = {
+    url: absoluteUrl(ogImagePath(path)),
+    width: OG_IMAGE.width,
+    height: OG_IMAGE.height,
+    alt: title,
+  };
+  const indexable = !noindex && IS_PRODUCTION;
   return {
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { name: "robots", content: noindex || !IS_PRODUCTION ? "noindex, follow" : ROBOTS_INDEX },
-      { property: "og:site_name", content: SITE_NAME },
-      { property: "og:locale", content: "en_US" },
-      { property: "og:type", content: ogType },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:url", content: url },
-      { property: "og:image", content: image },
-      { property: "og:image:width", content: String(OG_IMAGE.width) },
-      { property: "og:image:height", content: String(OG_IMAGE.height) },
-      { property: "og:image:alt", content: OG_IMAGE.alt },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: title },
-      { name: "twitter:description", content: description },
-      { name: "twitter:image", content: image },
-      { name: "twitter:image:alt", content: OG_IMAGE.alt },
-      {
-        "script:ld+json": {
-          "@context": "https://schema.org",
-          "@graph": [...siteNodes(), ...graph],
-        },
+    metadata: {
+      title: { absolute: title },
+      description,
+      robots: indexable
+        ? {
+            index: true,
+            follow: true,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+            "max-video-preview": -1,
+          }
+        : { index: false, follow: true },
+      alternates: { canonical: url },
+      openGraph: {
+        siteName: SITE_NAME,
+        locale: "en_US",
+        type: ogType,
+        title,
+        description,
+        url,
+        images: [image],
       },
-    ],
-    links: [{ rel: "canonical", href: url }],
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [{ url: image.url, alt: image.alt }],
+      },
+    },
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [...siteNodes(), ...graph],
+    },
   };
 }

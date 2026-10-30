@@ -1,19 +1,24 @@
+"use client";
+
 import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
+
+import { useCurrentYear } from "@/lib/use-current-year";
 import { ArrowUpRight, CheckCircle2, Mail, Globe, MapPin } from "lucide-react";
 import { Eyebrow } from "./Reveal";
-import { catalogGroup, standardsSplit } from "@/content/catalog";
+import { catalogGroup, standardsNavEntries } from "@/content/catalog";
 import { HUBS } from "@/content/hubs";
 import type { ContentGroup } from "@/content/types";
+import Image from "next/image";
 
 export function FinaleSection() {
   return (
     <section id="start" className="relative overflow-hidden bg-surface py-10 md:py-14">
       {/* Background Lighting */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="zigzag absolute -inset-24 -rotate-6 opacity-80 [mask-image:linear-gradient(115deg,black_0%,black_26%,transparent_60%)]" />
-        <div className="zigzag absolute -inset-24 rotate-3 opacity-55 [mask-image:linear-gradient(295deg,black_0%,black_20%,transparent_55%)]" />
-        <div className="blueprint absolute inset-0 opacity-25 [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)]" />
+        <div className="absolute -inset-24 -rotate-6 zigzag [mask-image:linear-gradient(115deg,black_0%,black_26%,transparent_60%)] opacity-80" />
+        <div className="absolute -inset-24 rotate-3 zigzag [mask-image:linear-gradient(295deg,black_0%,black_20%,transparent_55%)] opacity-55" />
+        <div className="absolute inset-0 blueprint [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)] opacity-25" />
         <div className="absolute top-1/2 left-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[140px]" />
       </div>
 
@@ -23,28 +28,28 @@ export function FinaleSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="relative overflow-hidden rounded-3xl border border-brand/30 bg-card p-6 sm:p-10 shadow-lift backdrop-blur-xl"
+          className="relative overflow-hidden rounded-3xl border border-brand/30 bg-card p-6 shadow-lift backdrop-blur-xl sm:p-10"
         >
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-center">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
             {/* Left Content */}
-            <div className="lg:col-span-7 space-y-5 text-center sm:text-left">
+            <div className="space-y-5 text-center sm:text-left lg:col-span-7">
               <div className="flex justify-center sm:justify-start">
                 <Eyebrow>Transform Your Teaching</Eyebrow>
               </div>
 
-              <h2 className="font-display text-3xl font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl leading-[1.1]">
+              <h2 className="font-display text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl">
                 Reclaim Your Sunday Evenings. <br />
-                <span className="font-highlight bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-brand via-sky-500 to-indigo-600 bg-clip-text font-highlight text-transparent">
                   Start Building Lessons in Seconds.
                 </span>
               </h2>
 
-              <p className="text-base text-muted-foreground sm:text-lg max-w-xl">
+              <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
                 Upload one textbook PDF and get a full lesson plan, a quiz with answer keys and
                 ready-to-print assignments back in minutes.
               </p>
 
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-2 sm:justify-start">
                 <a
                   href="https://app.coursesmith.supermia.ai"
                   target="_blank"
@@ -61,23 +66,23 @@ export function FinaleSection() {
             {/* Right Storytelling Image */}
             <div className="lg:col-span-5">
               <div className="relative overflow-hidden rounded-2xl border border-border/60 shadow-soft">
-                <img
+                <Image
+                  sizes="(min-width: 1024px) 40vw, 100vw"
                   width={1024}
                   height={1024}
-                  loading="lazy"
                   decoding="async"
                   src="/finale-teacher.webp"
                   alt="Happy teacher using CourseSmith AI copilot"
-                  className="h-[300px] sm:h-[360px] w-full object-cover"
+                  className="h-[300px] w-full object-cover sm:h-[360px]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-card/60 via-transparent to-transparent" />
 
-                <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-brand/30 bg-card/95 p-3.5 shadow-soft backdrop-blur-md">
+                <div className="absolute right-4 bottom-4 left-4 rounded-xl border border-brand/30 bg-card/95 p-3.5 shadow-soft backdrop-blur-md">
                   <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs font-bold text-ink">
                     <span className="flex items-center gap-1.5 text-emerald-500">
                       <CheckCircle2 className="h-4 w-4" /> Full Unit in Minutes
                     </span>
-                    <span className="text-brand text-[11px]">From One PDF</span>
+                    <span className="text-[11px] text-brand">From One PDF</span>
                   </div>
                 </div>
               </div>
@@ -95,14 +100,13 @@ type FooterLink = { label: string; href: string };
 function footerCols(): { t: string; href: string; l: FooterLink[] }[] {
   const toLinks = (g: ContentGroup): FooterLink[] =>
     catalogGroup(g).map((e) => ({ label: e.label, href: e.path }));
-  const { national, states } = standardsSplit();
   return [
     { t: HUBS.features.label, href: HUBS.features.path, l: toLinks("features") },
     { t: HUBS["use-cases"].label, href: HUBS["use-cases"].path, l: toLinks("use-cases") },
     {
       t: HUBS.standards.label,
       href: HUBS.standards.path,
-      l: [...national, ...states].map((e) => ({ label: e.label, href: e.path })),
+      l: standardsNavEntries().map((e) => ({ label: e.label, href: e.path })),
     },
     { t: HUBS.compare.label, href: HUBS.compare.path, l: toLinks("compare") },
     { t: HUBS.resources.label, href: HUBS.resources.path, l: toLinks("resources") },
@@ -121,11 +125,13 @@ function footerCols(): { t: string; href: string; l: FooterLink[] }[] {
 }
 
 export function SiteFooter() {
+  const year = useCurrentYear();
+
   return (
     <footer className="relative overflow-hidden bg-primary text-primary-foreground">
       {/* Ambient brand lighting + hand-drawn zigzag, matching the finale above */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="zigzag absolute -inset-24 -rotate-6 opacity-25 [mask-image:linear-gradient(115deg,black_0%,black_24%,transparent_58%)]" />
+        <div className="absolute -inset-24 -rotate-6 zigzag [mask-image:linear-gradient(115deg,black_0%,black_24%,transparent_58%)] opacity-25" />
         <div className="absolute -top-40 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-brand/20 blur-[150px]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand/60 to-transparent" />
       </div>
@@ -136,7 +142,7 @@ export function SiteFooter() {
           <div className="lg:col-span-6">
             <h3 className="font-display text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
               Built for teachers,{" "}
-              <span className="font-highlight bg-gradient-to-r from-brand-soft via-sky-300 to-indigo-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-brand-soft via-sky-300 to-indigo-300 bg-clip-text font-highlight text-transparent">
                 ready for your first lesson.
               </span>
             </h3>
@@ -173,12 +179,11 @@ export function SiteFooter() {
         {/* Brand + link directory */}
         <div className="grid gap-10 py-10 lg:grid-cols-[1fr_3.4fr]">
           <div>
-            <img
+            <Image
+              width={207}
+              height={32}
               src="/logo.png"
               alt="CourseSmith"
-              width={1608}
-              height={248}
-              loading="lazy"
               className="h-8 w-auto object-contain brightness-0 invert"
             />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
@@ -254,18 +259,18 @@ export function SiteFooter() {
         {/* Legal bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 py-6 text-xs text-white/65">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <p>© {new Date().getFullYear()} CourseSmith by SuperMIA. All rights reserved.</p>
+            <p>© {year} CourseSmith by SuperMIA. All rights reserved.</p>
             <span className="hidden h-3 w-px bg-white/20 sm:block" />
             <Link
-              to="/privacy"
-              className="transition-colors hover:text-brand-soft hover:underline underline-offset-4"
+              href="/privacy"
+              className="underline-offset-4 transition-colors hover:text-brand-soft hover:underline"
             >
               Privacy Policy
             </Link>
             <span className="h-3 w-px bg-white/20" />
             <Link
-              to="/terms"
-              className="transition-colors hover:text-brand-soft hover:underline underline-offset-4"
+              href="/terms"
+              className="underline-offset-4 transition-colors hover:text-brand-soft hover:underline"
             >
               Terms of Service
             </Link>

@@ -1,7 +1,10 @@
+"use client";
+
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Play, Youtube, ArrowUpRight, Check } from "lucide-react";
 import { Eyebrow, WordReveal } from "./Reveal";
+import Image from "next/image";
 
 const VIDEO_ID = "8IFU8kAQfh4";
 const VIDEO_TITLE = "CourseSmith - AI Teaching Assistant for Educators";
@@ -33,7 +36,7 @@ export function DemoVideoSection() {
     >
       {/* Background lighting, matching the neighbouring bands */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="blueprint absolute inset-0 opacity-25 [mask-image:radial-gradient(72%_60%_at_50%_45%,black,transparent)]" />
+        <div className="absolute inset-0 blueprint [mask-image:radial-gradient(72%_60%_at_50%_45%,black,transparent)] opacity-25" />
         <div className="absolute top-1/2 left-1/2 -z-10 h-[460px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[140px]" />
       </div>
 
@@ -125,12 +128,12 @@ export function DemoVideoSection() {
                       aria-label={`Play video: ${VIDEO_TITLE}`}
                       className="group absolute inset-0 h-full w-full cursor-pointer"
                     >
-                      <img
+                      <Image
+                        sizes="(min-width: 768px) 360px, 100vw"
                         src="/demo-poster.jpg"
                         alt=""
                         width={720}
                         height={1280}
-                        loading="lazy"
                         decoding="async"
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />

@@ -1,6 +1,9 @@
+"use client";
+
 import { motion } from "motion/react";
 import { Download, FileText, Check, ArrowUpRight } from "lucide-react";
 import { Eyebrow, Reveal, WordReveal } from "./Reveal";
+import Image from "next/image";
 
 /** Public path of the brochure PDF, served straight from /public. */
 const BROCHURE = "/CourseSmith.pdf";
@@ -17,8 +20,8 @@ export function BrochureSection() {
     <section id="brochure" className="relative overflow-hidden bg-surface py-10 md:py-14">
       {/* Background lighting, matching the finale band */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="zigzag absolute -inset-24 rotate-3 opacity-50 [mask-image:linear-gradient(295deg,black_0%,black_22%,transparent_58%)]" />
-        <div className="blueprint absolute inset-0 opacity-20 [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)]" />
+        <div className="absolute -inset-24 rotate-3 zigzag [mask-image:linear-gradient(295deg,black_0%,black_22%,transparent_58%)] opacity-50" />
+        <div className="absolute inset-0 blueprint [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)] opacity-20" />
         <div className="absolute top-1/2 left-1/2 -z-10 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[140px]" />
       </div>
 
@@ -108,10 +111,10 @@ export function BrochureSection() {
                         aria-hidden
                         className="pointer-events-none absolute inset-x-0 top-[15%] bottom-[28%] overflow-hidden"
                       >
-                        <img
+                        <Image
+                          sizes="(min-width: 1024px) 40vw, 100vw"
                           width={1024}
                           height={1024}
-                          loading="lazy"
                           decoding="async"
                           src="/section3-output.webp"
                           alt=""
@@ -121,7 +124,9 @@ export function BrochureSection() {
                       </span>
 
                       <span className="relative flex items-center justify-between">
-                        <img
+                        <Image
+                          width={155}
+                          height={24}
                           src="/logo.png"
                           alt=""
                           className="h-6 w-auto object-contain brightness-0 invert"

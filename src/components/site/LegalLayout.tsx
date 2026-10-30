@@ -1,5 +1,7 @@
+"use client";
+
 import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { ArrowLeft, CalendarDays, FileText, Mail } from "lucide-react";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -30,8 +32,8 @@ export function LegalLayout({
       {/* Header */}
       <section className="relative overflow-hidden bg-surface pt-28 pb-12 md:pt-36 md:pb-16">
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="zigzag absolute -inset-24 -rotate-6 opacity-60 [mask-image:linear-gradient(115deg,black_0%,black_22%,transparent_55%)]" />
-          <div className="blueprint absolute inset-0 opacity-25 [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)]" />
+          <div className="absolute -inset-24 -rotate-6 zigzag [mask-image:linear-gradient(115deg,black_0%,black_22%,transparent_55%)] opacity-60" />
+          <div className="absolute inset-0 blueprint [mask-image:radial-gradient(75%_65%_at_50%_50%,black,transparent)] opacity-25" />
           <div className="absolute -top-40 left-1/2 h-[460px] w-[820px] -translate-x-1/2 rounded-full bg-brand/10 blur-[140px]" />
         </div>
 
@@ -45,7 +47,7 @@ export function LegalLayout({
             {/* Own row: the back link must not share a line with the eyebrow. */}
             <div>
               <Link
-                to="/"
+                href="/"
                 className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-brand"
               >
                 <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
@@ -54,7 +56,7 @@ export function LegalLayout({
             </div>
 
             <div className="mt-8">
-              <span className="eyebrow inline-flex items-center gap-2 rounded-full border border-brand/25 bg-card px-4 py-1.5 shadow-soft">
+              <span className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-card px-4 py-1.5 eyebrow shadow-soft">
                 <FileText className="h-3.5 w-3.5" />
                 {eyebrow}
               </span>
@@ -90,7 +92,7 @@ export function LegalLayout({
             {/* Contact card */}
             <div className="relative overflow-hidden rounded-3xl border border-brand/30 bg-card p-6 text-center shadow-soft sm:p-10">
               <div className="pointer-events-none absolute inset-0 -z-10">
-                <div className="blueprint absolute inset-0 opacity-30 [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)]" />
+                <div className="absolute inset-0 blueprint [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)] opacity-30" />
               </div>
 
               <h2 className="font-display text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
