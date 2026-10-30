@@ -22,25 +22,6 @@ function wordCount(page: ContentPage): number {
     .filter(Boolean).length;
 }
 
-function aboutNode(page: ContentPage) {
-  if (!page.region) return { "@id": ID.software };
-  return [
-    {
-      "@type": page.region.code === "US" ? "Country" : "State",
-      name: page.region.name,
-      ...(page.region.code === "US"
-        ? {}
-        : { containedInPlace: { "@type": "Country", name: "United States" } }),
-    },
-    {
-      "@type": "DefinedTermSet",
-      name: page.region.framework,
-      url: page.region.officialUrl,
-      publisher: { "@type": "GovernmentOrganization", name: page.region.adoptingBody },
-    },
-  ];
-}
-
 export function contentPageHead(page: ContentPage, crumbs: Crumb[]) {
   const path = pagePath(page);
   const url = absoluteUrl(path);
@@ -53,10 +34,8 @@ export function contentPageHead(page: ContentPage, crumbs: Crumb[]) {
       datePublished: page.datePublished,
       dateModified: page.dateModified,
       faqs: page.faqs,
-      about: aboutNode(page) as Record<string, unknown>,
       extra: {
         keywords: [page.primaryKeyword, ...page.secondaryKeywords].join(", "),
-        ...(page.region ? { spatialCoverage: { "@type": "Place", name: page.region.name } } : {}),
         ...(page.sources?.length ? { citation: page.sources.map((s) => s.url) } : {}),
       },
     }),

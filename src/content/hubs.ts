@@ -81,35 +81,6 @@ export const HUBS: Record<ContentGroup, Hub> = {
       },
     ],
   },
-  standards: {
-    group: "standards",
-    path: "/standards",
-    label: "Standards by state",
-    metaTitle: "State Standards Lesson Plans: TEKS, B.E.S.T. | CourseSmith",
-    metaDescription:
-      "Plain-English guides to Common Core, NGSS, TEKS, B.E.S.T. and 12 state frameworks, plus how to plan standards-referenced lessons with CourseSmith.",
-    eyebrow: "Standards by state",
-    h1: "Lesson planning with your state's learning standards",
-    answer:
-      "US learning standards are set state by state. Some states use Common Core-based standards and NGSS, while others such as Texas (TEKS), Florida (B.E.S.T.) and Virginia (SOL) write their own. Each guide here explains one framework and shows how to plan lessons with CourseSmith using your state-adopted textbook.",
-    intro:
-      "Each guide links to the official standards documents, explains how codes are written and shows a review checklist for standards-referenced plans.",
-    listHeading: "Standards guides",
-    faqs: [
-      {
-        q: "Does CourseSmith automatically align lessons to my state standards?",
-        a: "CourseSmith builds lessons from the textbook you upload, so if your district uses a state-adopted textbook, the plans follow that content. You can paste a standard's wording into the AI teaching assistant to focus a lesson on it, then confirm the code against your state's official document.",
-      },
-      {
-        q: "Where do I find the official standards for my state?",
-        a: "Every state guide on this page links to the state education agency's official standards documents. Always treat those documents as the source of truth when you write standard codes into a lesson plan.",
-      },
-      {
-        q: "Why does each state have a different framework?",
-        a: "Education in the United States is governed by states, so each state board of education adopts its own learning standards. Many states adapted Common Core or NGSS, while others wrote their own frameworks and revise them on their own schedules.",
-      },
-    ],
-  },
   compare: {
     group: "compare",
     path: "/compare",
@@ -169,13 +140,7 @@ export const HUBS: Record<ContentGroup, Hub> = {
   },
 };
 
-export const GROUP_ORDER: ContentGroup[] = [
-  "features",
-  "use-cases",
-  "standards",
-  "compare",
-  "resources",
-];
+export const GROUP_ORDER: ContentGroup[] = ["features", "use-cases", "compare", "resources"];
 
 /** Site-level pages outside the content groups, for sitemap / llms.txt / footer. */
 export const STATIC_PAGES: { path: string; label: string; blurb: string }[] = [

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useCurrentYear } from "@/lib/use-current-year";
 import { ArrowUpRight, CheckCircle2, Mail, Globe, MapPin } from "lucide-react";
 import { Eyebrow } from "./Reveal";
-import { catalogGroup, standardsNavEntries } from "@/content/catalog";
+import { catalogGroup } from "@/content/catalog";
 import { HUBS } from "@/content/hubs";
 import type { ContentGroup } from "@/content/types";
 import Image from "next/image";
@@ -103,11 +103,6 @@ function footerCols(): { t: string; href: string; l: FooterLink[] }[] {
   return [
     { t: HUBS.features.label, href: HUBS.features.path, l: toLinks("features") },
     { t: HUBS["use-cases"].label, href: HUBS["use-cases"].path, l: toLinks("use-cases") },
-    {
-      t: HUBS.standards.label,
-      href: HUBS.standards.path,
-      l: standardsNavEntries().map((e) => ({ label: e.label, href: e.path })),
-    },
     { t: HUBS.compare.label, href: HUBS.compare.path, l: toLinks("compare") },
     { t: HUBS.resources.label, href: HUBS.resources.path, l: toLinks("resources") },
     {
@@ -229,7 +224,7 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-6">
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-5">
             {footerCols().map((c) => (
               <div key={c.t}>
                 <a

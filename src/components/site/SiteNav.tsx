@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
-import { catalogGroup, standardsNavEntries, type CatalogEntry } from "@/content/catalog";
+import { catalogGroup, type CatalogEntry } from "@/content/catalog";
 import { HUBS } from "@/content/hubs";
 import type { ContentGroup } from "@/content/types";
 import { APP_URL } from "@/lib/seo";
@@ -15,19 +15,12 @@ type MenuDef = {
   /** Columns of the link grid inside the panel. */
   cols: string;
   items: CatalogEntry[];
-  compact?: boolean;
 };
 
 function menus(): MenuDef[] {
   return [
     { group: "features", cols: "sm:grid-cols-2", items: catalogGroup("features") },
     { group: "use-cases", cols: "sm:grid-cols-3", items: catalogGroup("use-cases") },
-    {
-      group: "standards",
-      cols: "sm:grid-cols-4",
-      items: standardsNavEntries(),
-      compact: true,
-    },
     { group: "compare", cols: "sm:grid-cols-2", items: catalogGroup("compare") },
     {
       group: "resources",
@@ -51,7 +44,6 @@ const FOR_SCHOOLS = "/use-cases/schools-and-districts";
 const MENU_LABEL: Record<ContentGroup, string> = {
   features: "Features",
   "use-cases": "Use cases",
-  standards: "Standards",
   compare: "Compare",
   resources: "Resources",
 };
@@ -266,20 +258,13 @@ function MenuPanel({ menu, onNavigate }: { menu: MenuDef; onNavigate: () => void
               onClick={onNavigate}
               className="group/link flex items-start gap-3 rounded-2xl p-3 transition-colors hover:bg-accent"
             >
-              {i.regionCode ? (
-                <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand/10 font-display text-[11px] font-extrabold text-brand transition-colors group-hover/link:bg-brand group-hover/link:text-white">
-                  {i.regionCode === "US" ? "US" : i.regionCode.replace("US-", "")}
-                </span>
-              ) : null}
               <span className="min-w-0">
                 <span className="block text-sm font-semibold text-ink group-hover/link:text-brand">
                   {i.label}
                 </span>
-                {menu.compact ? null : (
-                  <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
-                    {i.blurb}
-                  </span>
-                )}
+                <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
+                  {i.blurb}
+                </span>
               </span>
             </a>
           </li>

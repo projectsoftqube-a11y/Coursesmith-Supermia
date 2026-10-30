@@ -4,7 +4,7 @@
  * never drift from what the page renders.
  */
 
-export type ContentGroup = "features" | "use-cases" | "standards" | "compare" | "resources";
+export type ContentGroup = "features" | "use-cases" | "compare" | "resources";
 
 export type ContentTable = {
   caption: string;
@@ -27,20 +27,6 @@ export type ContentSection = {
 export type Faq = { q: string; a: string };
 
 export type Source = { label: string; url: string };
-
-/** Only on /standards pages: the state (or national framework) the page covers. */
-export type Region = {
-  /** "Texas", or "United States" for national frameworks. */
-  name: string;
-  /** ISO 3166-2 code, e.g. "US-TX"; "US" for national frameworks. */
-  code: string;
-  /** Official framework name, e.g. "Texas Essential Knowledge and Skills (TEKS)". */
-  framework: string;
-  /** Body that adopts the standards, e.g. "Texas State Board of Education". */
-  adoptingBody: string;
-  /** Official page for the standards, on a .gov / .org / state domain. */
-  officialUrl: string;
-};
 
 export type ContentPage = {
   slug: string;
@@ -73,5 +59,4 @@ export type ContentPage = {
   /** ISO date, e.g. "2026-10-30". */
   datePublished: string;
   dateModified: string;
-  region?: Region;
 };

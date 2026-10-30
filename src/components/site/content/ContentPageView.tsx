@@ -48,7 +48,6 @@ export function contentCrumbs(page: ContentPage): Crumb[] {
 const SECONDARY_BY_GROUP: Record<ContentPage["group"], { href: string; label: string }> = {
   features: { href: "/features/textbook-to-lesson-plan", label: "See how it works" },
   "use-cases": { href: "/features", label: "Explore the tools" },
-  standards: { href: "/standards", label: "All state guides" },
   compare: { href: "/compare", label: "All comparisons" },
   resources: { href: "/resources/lesson-plan-template", label: "Free lesson plan template" },
 };

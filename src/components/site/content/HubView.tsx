@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { catalogGroup, standardsSplit, type CatalogEntry } from "@/content/catalog";
+import { catalogGroup, type CatalogEntry } from "@/content/catalog";
 import { SITE_UPDATED, type Hub } from "@/content/hubs";
 import { PageShell } from "./ContentPageView";
 import {
@@ -24,14 +24,11 @@ export function hubCrumbs(hub: Hub) {
 
 /** Pages a hub lists, in display order. Shared with the hub's ItemList schema. */
 export function hubPages(hub: Hub): CatalogEntry[] {
-  if (hub.group !== "standards") return catalogGroup(hub.group);
-  const { national, states } = standardsSplit();
-  return [...national, ...states];
+  return catalogGroup(hub.group);
 }
 
 export function HubView({ hub }: { hub: Hub }) {
   const pages = hubPages(hub);
-  const split = hub.group === "standards" ? standardsSplit() : null;
 
   return (
     <PageShell>
@@ -67,14 +64,7 @@ export function HubView({ hub }: { hub: Hub }) {
 
       <section className="bg-background py-14 md:py-20">
         <Container className="space-y-14">
-          {split ? (
-            <>
-              <CardGroup title="National frameworks" pages={split.national} />
-              <CardGroup title="State standards" pages={split.states} badges />
-            </>
-          ) : (
-            <CardGroup title={hub.listHeading} pages={pages} />
-          )}
+          <CardGroup title={hub.listHeading} pages={pages} />
           <div className="max-w-3xl">
             <FaqList faqs={hub.faqs} />
           </div>
@@ -86,15 +76,7 @@ export function HubView({ hub }: { hub: Hub }) {
   );
 }
 
-function CardGroup({
-  title,
-  pages,
-  badges,
-}: {
-  title: string;
-  pages: CatalogEntry[];
-  badges?: boolean;
-}): ReactNode {
+function CardGroup({ title, pages }: { title: string; pages: CatalogEntry[] }): ReactNode {
   if (!pages.length) return null;
   return (
     <div>
@@ -103,13 +85,7 @@ function CardGroup({
       </h2>
       <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {pages.map((p) => (
-          <LinkCard
-            key={p.path}
-            href={p.path}
-            title={p.label}
-            blurb={p.blurb}
-            {...(badges && p.regionCode ? { badge: p.regionCode.replace("US-", "") } : {})}
-          />
+          <LinkCard key={p.path} href={p.path} title={p.label} blurb={p.blurb} />
         ))}
       </div>
     </div>

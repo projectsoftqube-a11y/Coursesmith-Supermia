@@ -449,8 +449,8 @@ export const FEATURE_PAGES: ContentPage[] = [
     related: [
       "/features/textbook-to-lesson-plan",
       "/use-cases/schools-and-districts",
-      "/standards/common-core",
       "/use-cases/high-school",
+      "/resources/how-to-write-a-lesson-plan",
     ],
     primaryKeyword: "ai curriculum generator",
     secondaryKeywords: ["course outline generator", "curriculum mapping tool", "syllabus planner"],

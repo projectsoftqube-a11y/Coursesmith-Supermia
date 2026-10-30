@@ -1,14 +1,6 @@
 import type { ContentGroup, ContentPage } from "./types";
 import { FEATURE_PAGES } from "./features";
 import { USE_CASE_PAGES } from "./use-cases";
-import { STANDARDS_PAGES_A } from "./standards-a";
-import { STANDARDS_PAGES_B } from "./standards-b";
-import { STANDARDS_PAGES_C } from "./standards-c";
-import { STANDARDS_PAGES_D } from "./standards-d";
-import { STANDARDS_PAGES_E } from "./standards-e";
-import { STANDARDS_PAGES_F } from "./standards-f";
-import { STANDARDS_PAGES_G } from "./standards-g";
-import { STANDARDS_PAGES_H } from "./standards-h";
 import { COMPARE_PAGES } from "./compare";
 import { RESOURCE_PAGES } from "./resources";
 import { GROUP_ORDER } from "./hubs";
@@ -21,16 +13,6 @@ import { GROUP_ORDER } from "./hubs";
 export const PAGES_BY_GROUP: Record<ContentGroup, ContentPage[]> = {
   features: FEATURE_PAGES,
   "use-cases": USE_CASE_PAGES,
-  standards: [
-    ...STANDARDS_PAGES_A,
-    ...STANDARDS_PAGES_B,
-    ...STANDARDS_PAGES_C,
-    ...STANDARDS_PAGES_D,
-    ...STANDARDS_PAGES_E,
-    ...STANDARDS_PAGES_F,
-    ...STANDARDS_PAGES_G,
-    ...STANDARDS_PAGES_H,
-  ],
   compare: COMPARE_PAGES,
   resources: RESOURCE_PAGES,
 };
