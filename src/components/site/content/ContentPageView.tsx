@@ -1,6 +1,6 @@
 import { readingMinutes } from "@/content/load";
 import type { ContentPage } from "@/content/types";
-import { visualFor } from "@/content/visuals";
+import { pagePhotos } from "@/content/visuals";
 import {
   Chapters,
   CtaBand,
@@ -31,6 +31,10 @@ export function ContentPageView({ page }: { page: ContentPage }) {
     page.group === "features" && page.slug === "textbook-to-lesson-plan"
       ? { href: "/features", label: "All features" }
       : SECONDARY_BY_GROUP[page.group];
+  const photos = pagePhotos(`/${page.group}/${page.slug}`, {
+    sections: page.sections,
+    related: page.related,
+  });
   const term = page.definition.split(/\s+is\s+/)[0] ?? page.navLabel;
 
   return (
@@ -39,7 +43,7 @@ export function ContentPageView({ page }: { page: ContentPage }) {
         eyebrow={page.eyebrow}
         title={page.h1}
         answer={page.answer}
-        visual={visualFor(page.slug)}
+        visual={photos.hero}
         cardTitle={page.navLabel}
         updated={page.dateModified}
         minutes={readingMinutes(page)}
@@ -51,11 +55,11 @@ export function ContentPageView({ page }: { page: ContentPage }) {
         }
       />
       <Overview toc={toc} takeaways={page.takeaways} term={term} definition={page.definition} />
-      <Chapters sections={page.sections} seed={page.slug} />
+      <Chapters sections={page.sections} photos={photos.sections} />
       <FaqBand faqs={page.faqs} />
       {page.sources?.length ? <SourceList sources={page.sources} /> : null}
-      <RelatedGrid paths={page.related} />
-      <CtaBand />
+      <RelatedGrid paths={page.related} photos={photos.related} />
+      <CtaBand photo={photos.cta} />
     </PageShell>
   );
 }

@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { describePath } from "@/content/catalog";
 import type { ContentSection, ContentTable, Faq, Source } from "@/content/types";
-import { visualFor, type Visual } from "@/content/visuals";
+import type { Visual } from "@/content/visuals";
 import { APP_URL } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { SiteFooter } from "../FinaleSection";
@@ -433,11 +433,11 @@ function ChecklistCard({ items }: { items: string[] }) {
 function SplitChapter({
   section,
   index,
-  seed,
+  photo,
 }: {
   section: ContentSection;
   index: number;
-  seed: string;
+  photo: Visual | null;
 }) {
   const id = slugify(section.heading);
   const flip = index % 2 === 1;
@@ -456,11 +456,8 @@ function SplitChapter({
             </div>
           </Reveal>
           <Reveal delay={0.1} className="min-w-0 lg:col-span-5">
-            {section.bullets ? (
-              <ChecklistCard items={section.bullets} />
-            ) : (
-              <PhotoCard visual={visualFor(seed, index + 1)} />
-            )}
+            {section.bullets ? <ChecklistCard items={section.bullets} /> : null}
+            {photo ? <PhotoCard visual={photo} /> : null}
           </Reveal>
         </div>
       </Container>
@@ -544,22 +541,33 @@ function StepsChapter({ section, index }: { section: ContentSection; index: numb
 export function Chapter({
   section,
   index,
-  seed,
+  photo,
 }: {
   section: ContentSection;
   index: number;
-  seed: string;
+  photo: Visual | null;
 }) {
   if (section.steps?.length) return <StepsChapter section={section} index={index} />;
   if (section.table) return <TableChapter section={section} index={index} />;
-  return <SplitChapter section={section} index={index} seed={seed} />;
+  return <SplitChapter section={section} index={index} photo={photo} />;
 }
 
-export function Chapters({ sections, seed }: { sections: ContentSection[]; seed: string }) {
+export function Chapters({
+  sections,
+  photos,
+}: {
+  sections: ContentSection[];
+  photos: (Visual | null)[];
+}) {
   return (
     <article>
       {sections.map((section, index) => (
-        <Chapter key={section.heading} section={section} index={index} seed={seed} />
+        <Chapter
+          key={section.heading}
+          section={section}
+          index={index}
+          photo={photos[index] ?? null}
+        />
       ))}
     </article>
   );
@@ -658,14 +666,19 @@ export function SourceList({ sources }: { sources: Source[] }) {
 /** Photo-topped cards for the next pages to read. */
 export function RelatedGrid({
   paths,
+  photos,
   heading = "Keep Exploring CourseSmith Guides",
 }: {
   paths: string[];
+  photos: Visual[];
   heading?: string;
 }) {
   const items = paths
-    .map((p) => ({ path: p, info: describePath(p) }))
-    .filter((x): x is { path: string; info: { label: string; blurb: string } } => !!x.info);
+    .map((p, i) => ({ path: p, info: describePath(p), photo: photos[i] }))
+    .filter(
+      (x): x is { path: string; info: { label: string; blurb: string }; photo: Visual } =>
+        !!x.info && !!x.photo,
+    );
   if (!items.length) return null;
   return (
     <section className="relative bg-surface py-12 md:py-16">
@@ -678,7 +691,7 @@ export function RelatedGrid({
             items.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3",
           )}
         >
-          {items.map(({ path, info }, i) => (
+          {items.map(({ path, info, photo }, i) => (
             <li key={path}>
               <Reveal delay={i * 0.06} className="h-full">
                 <a
@@ -687,7 +700,7 @@ export function RelatedGrid({
                 >
                   <span className="block overflow-hidden">
                     <Image
-                      src={visualFor(paths[0] ?? path, i).src}
+                      src={photo.src}
                       alt=""
                       width={1024}
                       height={1024}
@@ -716,9 +729,11 @@ export function RelatedGrid({
 
 /** Closing card in the style of the landing finale. */
 export function CtaBand({
+  photo,
   title = "Turn your next textbook chapter into a full lesson.",
   text = "Upload a textbook PDF and get a lesson plan built for your class length, a test paper with an answer key and assignments you can download as Word files. Free to start, no credit card needed.",
 }: {
+  photo: Visual;
   title?: string;
   text?: string;
 }) {
@@ -746,8 +761,8 @@ export function CtaBand({
             <div className="lg:col-span-5">
               <div className="relative overflow-hidden rounded-2xl border border-border/60 shadow-soft">
                 <Image
-                  src="/finale-teacher.webp"
-                  alt="Teacher holding a tablet in a bright classroom while students work in groups"
+                  src={photo.src}
+                  alt={photo.alt}
                   width={1024}
                   height={1024}
                   sizes="(min-width: 1024px) 40vw, 100vw"

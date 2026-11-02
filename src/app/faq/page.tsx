@@ -10,7 +10,7 @@ import {
   PrimaryCta,
   SecondaryCta,
 } from "@/components/site/content/blocks";
-import { visualFor } from "@/content/visuals";
+import { pagePhotos } from "@/content/visuals";
 import { pageHead, webPageNode } from "@/lib/seo";
 
 const head = pageHead({
@@ -40,13 +40,14 @@ export default function Page() {
 }
 
 function FaqPage() {
+  const photos = pagePhotos(FAQ_PAGE.path);
   return (
     <PageShell>
       <PageHero
         eyebrow={FAQ_PAGE.eyebrow}
         title={FAQ_PAGE.h1}
         answer={FAQ_PAGE.answer}
-        visual={visualFor(FAQ_PAGE.path)}
+        visual={photos.hero}
         cardTitle={FAQ_PAGE.navLabel}
         updated={FAQ_PAGE.dateModified}
         actions={
@@ -71,6 +72,7 @@ function FaqPage() {
         />
       ))}
       <CtaBand
+        photo={photos.cta}
         title="Try it on one chapter."
         text="Upload your textbook, pick the chapter you teach next and see the lesson plan, test and answer key CourseSmith drafts. You review everything before it reaches your class."
       />

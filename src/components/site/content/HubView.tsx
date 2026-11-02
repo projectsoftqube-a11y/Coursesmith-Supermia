@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { catalogGroup, type CatalogEntry } from "@/content/catalog";
 import { SITE_UPDATED, type Hub } from "@/content/hubs";
-import { visualFor } from "@/content/visuals";
+import { pagePhotos } from "@/content/visuals";
 import { cn } from "@/lib/utils";
 import { Eyebrow, Reveal } from "../Reveal";
 import { Container, CtaBand, FaqBand, PageHero, PageShell, PrimaryCta } from "./blocks";
@@ -27,6 +27,7 @@ function cellSpan(index: number, total: number) {
 export function HubView({ hub }: { hub: Hub }) {
   const pages = hubPages(hub);
   const [lead, ...others] = pages;
+  const photos = pagePhotos(hub.path, { related: lead ? [lead.path] : [] });
 
   return (
     <PageShell>
@@ -35,7 +36,7 @@ export function HubView({ hub }: { hub: Hub }) {
         title={hub.h1}
         answer={hub.answer}
         answerLabel="In short"
-        visual={visualFor(hub.path)}
+        visual={photos.hero}
         cardTitle={hub.label}
         updated={SITE_UPDATED}
         actions={<PrimaryCta />}
@@ -80,7 +81,7 @@ export function HubView({ hub }: { hub: Hub }) {
                     </span>
                     <span className="relative mt-auto block overflow-hidden px-5 xs:px-7 sm:px-9">
                       <Image
-                        src={visualFor(lead.path).src}
+                        src={(photos.related[0] ?? photos.hero).src}
                         alt=""
                         width={1024}
                         height={1024}
@@ -118,7 +119,7 @@ export function HubView({ hub }: { hub: Hub }) {
       </section>
 
       <FaqBand faqs={hub.faqs} tinted={false} />
-      <CtaBand />
+      <CtaBand photo={photos.cta} />
     </PageShell>
   );
 }

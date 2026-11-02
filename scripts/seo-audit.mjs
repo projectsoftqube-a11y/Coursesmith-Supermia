@@ -152,6 +152,13 @@ for (const p of paths) {
       }
     }
   }
+  // A library photo may appear on many pages, but only once on any one page.
+  const photos = [...html.matchAll(/<img\b[^>]*?\ssrc="([^"]+)"/g)]
+    .map((m) => decodeURIComponent(m[1].replace(/&amp;/g, "&")).match(/\/images\/[\w-]+\.\w+/)?.[0])
+    .filter(Boolean);
+  const repeated = photos.filter((src, i) => photos.indexOf(src) !== i);
+  if (repeated.length) fail(p, `photo repeated on the page: ${[...new Set(repeated)].join(", ")}`);
+
   if (p !== "/" && p !== "/privacy" && p !== "/terms" && !html.includes('class="answer-block'))
     fail(p, "answer block not in server HTML");
 
