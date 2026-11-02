@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowUpRight,
   BookOpen,
@@ -44,18 +44,6 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
   const reduce = useReducedMotion();
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springConfig = { damping: 25, stiffness: 150 };
-  const spotlightX = useSpring(mouseX, springConfig);
-  const spotlightY = useSpring(mouseY, springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
-
   const rise = (delay: number) => ({
     initial: { opacity: 0, y: 14 },
     animate: { opacity: 1, y: 0 },
@@ -65,25 +53,14 @@ export function Hero() {
   return (
     <section
       id="top"
-      onMouseMove={handleMouseMove}
       className="relative w-full overflow-hidden pt-24 pb-8 xs:pt-28 md:pt-32 md:pb-10 lg:pt-36"
     >
-      {/* Background: mouse spotlight, drifting orbs, blueprint grid */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <motion.div
-          style={{ x: spotlightX, y: spotlightY }}
-          className="absolute -top-[250px] -left-[250px] h-[500px] w-[500px] rounded-full bg-brand/12 blur-[120px]"
-        />
-        <motion.div
-          animate={reduce ? undefined : { x: [0, 80, -60, 0], y: [0, -60, 50, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-gradient-to-tr from-brand/20 via-sky-400/15 to-indigo-500/20 blur-[110px]"
-        />
-        <motion.div
-          animate={reduce ? undefined : { x: [0, -90, 70, 0], y: [0, 70, -50, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/3 right-1/4 h-[450px] w-[450px] rounded-full bg-gradient-to-br from-indigo-500/15 via-brand/20 to-sky-400/20 blur-[130px]"
-        />
+      {/* Background: static radial glows (no filters, nothing animating) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(40%_45%_at_25%_35%,rgb(14_165_233/0.14),transparent_70%),radial-gradient(40%_50%_at_75%_40%,rgb(99_102_241/0.12),transparent_70%)]" />
         <div className="absolute inset-0 blueprint [mask-image:radial-gradient(80%_80%_at_50%_40%,black_30%,transparent_100%)] opacity-40" />
       </div>
 
@@ -92,11 +69,11 @@ export function Hero() {
           {/* Left: value proposition */}
           <div className="text-left lg:col-span-6">
             <motion.div {...rise(0)} className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/10 px-4 py-1.5 text-xs font-semibold text-brand shadow-soft backdrop-blur-md">
+              <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/10 px-4 py-1.5 text-xs font-semibold text-brand shadow-soft">
                 <GraduationCap className="h-4 w-4" />
                 Built Exclusively for Teachers
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-md">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3 py-1.5 text-xs font-medium text-muted-foreground">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-success/60 motion-safe:animate-ping" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
@@ -150,7 +127,7 @@ export function Hero() {
               <a
                 href="#features"
                 style={{ ["--cta-fill" as string]: "var(--color-primary)" }}
-                className="group cta-fill inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-border bg-card/90 px-5 py-3.5 text-sm font-medium text-primary backdrop-blur-md hover:border-brand/40 hover:text-white sm:w-auto sm:px-6"
+                className="group cta-fill inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-border bg-card/90 px-5 py-3.5 text-sm font-medium text-primary hover:border-brand/40 hover:text-white sm:w-auto sm:px-6"
               >
                 <span className="grid h-6 w-6 place-items-center rounded-full bg-brand/10 text-brand transition-colors duration-300 group-hover:bg-white/20 group-hover:text-white">
                   <Play className="h-2.5 w-2.5 fill-current" />
@@ -168,7 +145,7 @@ export function Hero() {
               {OUTPUTS.map(({ icon: Icon, title, text }) => (
                 <li
                   key={title}
-                  className="group flex items-center gap-2.5 rounded-2xl border border-border/80 bg-card/80 p-2.5 shadow-soft backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-lift sm:items-start sm:gap-3 sm:p-3.5"
+                  className="group flex items-center gap-2.5 rounded-2xl border border-border/80 bg-card/80 p-2.5 shadow-soft transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-lift sm:items-start sm:gap-3 sm:p-3.5"
                 >
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand/15 to-indigo-500/15 text-brand transition-colors duration-300 group-hover:from-brand group-hover:to-indigo-500 group-hover:text-white sm:h-10 sm:w-10">
                     <Icon className="h-[18px] w-[18px]" />
@@ -219,7 +196,6 @@ export function Hero() {
 
               {/* Card 1: upload being mapped */}
               <FloatCard
-                reduce={!!reduce}
                 delay={0.5}
                 drift={0}
                 className="top-3 left-3 max-w-[calc(100%-1.5rem)] sm:top-6 sm:left-6 sm:w-[250px] lg:-left-6 xl:-left-10"
@@ -237,10 +213,10 @@ export function Hero() {
                 </div>
                 <div className="mt-3 hidden h-1.5 overflow-hidden rounded-full bg-muted sm:block">
                   <motion.span
-                    initial={{ width: reduce ? "100%" : "0%" }}
-                    animate={{ width: "100%" }}
+                    initial={{ scaleX: reduce ? 1 : 0 }}
+                    animate={{ scaleX: 1 }}
                     transition={{ duration: 2, delay: 0.9, ease: "easeInOut" }}
-                    className="block h-full rounded-full bg-gradient-to-r from-brand to-indigo-500"
+                    className="block h-full origin-left rounded-full bg-gradient-to-r from-brand to-indigo-500"
                   />
                 </div>
                 <motion.p
@@ -256,7 +232,6 @@ export function Hero() {
 
               {/* Card 2: test paper mix */}
               <FloatCard
-                reduce={!!reduce}
                 delay={0.75}
                 drift={1.5}
                 className="top-1/2 right-4 hidden w-[250px] -translate-y-1/2 sm:block lg:-right-6 xl:-right-10"
@@ -286,10 +261,11 @@ export function Hero() {
                   ].map((s, i) => (
                     <motion.span
                       key={s.c}
-                      initial={{ width: reduce ? s.w : "0%" }}
-                      animate={{ width: s.w }}
+                      initial={{ scaleX: reduce ? 1 : 0 }}
+                      animate={{ scaleX: 1 }}
+                      style={{ width: s.w }}
                       transition={{ duration: 0.8, delay: 1.3 + i * 0.15, ease: EASE }}
-                      className={`block h-full rounded-full ${s.c}`}
+                      className={`block h-full origin-left rounded-full ${s.c}`}
                     />
                   ))}
                 </div>
@@ -306,7 +282,6 @@ export function Hero() {
 
               {/* Card 3: lesson plan ready */}
               <FloatCard
-                reduce={!!reduce}
                 delay={1}
                 drift={3}
                 className="right-4 bottom-4 left-4 sm:right-auto sm:bottom-6 sm:left-6 sm:w-[290px] lg:-bottom-8 lg:left-8"
@@ -386,13 +361,11 @@ function FloatCard({
   className,
   delay,
   drift,
-  reduce,
 }: {
   children: React.ReactNode;
   className: string;
   delay: number;
   drift: number;
-  reduce: boolean;
 }) {
   return (
     <motion.div
@@ -401,13 +374,12 @@ function FloatCard({
       transition={{ duration: 0.7, delay, ease: EASE }}
       className={`absolute z-10 ${className}`}
     >
-      <motion.div
-        animate={reduce ? undefined : { y: [0, -8, 0] }}
-        transition={{ duration: 6, delay: drift, repeat: Infinity, ease: "easeInOut" }}
-        className="rounded-2xl border border-white/70 bg-white/95 p-3.5 ring-1 shadow-lift ring-black/5 backdrop-blur-xl"
+      <div
+        style={{ animationDelay: `${drift}s` }}
+        className="rounded-2xl border border-border/70 bg-white p-3.5 shadow-lift will-change-transform motion-safe:float-slow"
       >
         {children}
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
