@@ -253,7 +253,7 @@ export function SiteNav() {
                       aria-controls={panelId}
                       onClick={() => setActive(isActive ? null : m.group)}
                       onFocus={() => setHovered(m.group)}
-                      className={`relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`relative flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors xl:px-4 ${
                         isActive || isCurrent
                           ? "text-primary"
                           : "text-muted-foreground hover:text-primary"
@@ -297,7 +297,7 @@ export function SiteNav() {
                 <a
                   href={FOR_SCHOOLS}
                   onFocus={() => setHovered("schools")}
-                  className={`relative flex rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`relative flex rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors xl:px-4 ${
                     pathname === FOR_SCHOOLS
                       ? "text-primary"
                       : "text-muted-foreground hover:text-primary"
