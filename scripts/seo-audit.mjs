@@ -151,7 +151,6 @@ for (const p of paths) {
           fail(p, `FAQ answer not rendered verbatim for: "${q.name}"`);
       }
     }
-    if (p !== "/" && !types.includes("BreadcrumbList")) fail(p, "no BreadcrumbList");
   }
   if (p !== "/" && p !== "/privacy" && p !== "/terms" && !html.includes('class="answer-block'))
     fail(p, "answer block not in server HTML");

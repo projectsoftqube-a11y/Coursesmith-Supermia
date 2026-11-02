@@ -1,31 +1,19 @@
-import { HUBS } from "@/content/hubs";
 import { readingMinutes } from "@/content/load";
 import type { ContentPage } from "@/content/types";
 import { visualFor } from "@/content/visuals";
-import type { Crumb } from "@/lib/seo";
 import {
-  BookShell,
   Chapters,
   CtaBand,
   FaqBand,
-  KeyTerm,
   Overview,
   PageHero,
+  PageShell,
   PrimaryCta,
   RelatedGrid,
   SecondaryCta,
   slugify,
   SourceList,
 } from "./blocks";
-
-export function contentCrumbs(page: ContentPage): Crumb[] {
-  const hub = HUBS[page.group];
-  return [
-    { name: "Home", path: "/" },
-    { name: hub.label, path: hub.path },
-    { name: page.navLabel, path: `/${page.group}/${page.slug}` },
-  ];
-}
 
 const SECONDARY_BY_GROUP: Record<ContentPage["group"], { href: string; label: string }> = {
   features: { href: "/features/textbook-to-lesson-plan", label: "See how it works" },
@@ -37,7 +25,7 @@ const SECONDARY_BY_GROUP: Record<ContentPage["group"], { href: string; label: st
 export function ContentPageView({ page }: { page: ContentPage }) {
   const toc = [
     ...page.sections.map((s) => ({ id: slugify(s.heading), label: s.heading })),
-    { id: "faq", label: "Review questions" },
+    { id: "faq", label: "Frequently asked questions" },
   ];
   const secondary =
     page.group === "features" && page.slug === "textbook-to-lesson-plan"
@@ -46,13 +34,13 @@ export function ContentPageView({ page }: { page: ContentPage }) {
   const term = page.definition.split(/\s+is\s+/)[0] ?? page.navLabel;
 
   return (
-    <BookShell>
+    <PageShell>
       <PageHero
-        crumbs={contentCrumbs(page)}
         eyebrow={page.eyebrow}
         title={page.h1}
         answer={page.answer}
         visual={visualFor(page.slug)}
+        cardTitle={page.navLabel}
         updated={page.dateModified}
         minutes={readingMinutes(page)}
         actions={
@@ -62,13 +50,12 @@ export function ContentPageView({ page }: { page: ContentPage }) {
           </>
         }
       />
-      <Overview toc={toc} takeaways={page.takeaways} />
-      <KeyTerm term={term} text={page.definition} />
+      <Overview toc={toc} takeaways={page.takeaways} term={term} definition={page.definition} />
       <Chapters sections={page.sections} seed={page.slug} />
       <FaqBand faqs={page.faqs} />
       {page.sources?.length ? <SourceList sources={page.sources} /> : null}
       <RelatedGrid paths={page.related} />
       <CtaBand />
-    </BookShell>
+    </PageShell>
   );
 }

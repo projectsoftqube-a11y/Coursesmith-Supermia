@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/seo/JsonLd";
-import { ContentPageView, contentCrumbs } from "@/components/site/content/ContentPageView";
+import { ContentPageView } from "@/components/site/content/ContentPageView";
 import { getContentPage, PAGES_BY_GROUP } from "@/content";
 import { contentPageHead } from "@/content/schema";
 
@@ -16,13 +16,13 @@ export async function generateMetadata({
   params,
 }: PageProps<"/features/[slug]">): Promise<Metadata> {
   const page = getContentPage(GROUP, (await params).slug);
-  return page ? contentPageHead(page, contentCrumbs(page)).metadata : {};
+  return page ? contentPageHead(page).metadata : {};
 }
 
 export default async function Page({ params }: PageProps<"/features/[slug]">) {
   const page = getContentPage(GROUP, (await params).slug);
   if (!page) notFound();
-  const head = contentPageHead(page, contentCrumbs(page));
+  const head = contentPageHead(page);
   return (
     <>
       <JsonLd data={head.jsonLd} />

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbNode, pageHead, webPageNode } from "@/lib/seo";
+import { pageHead, webPageNode } from "@/lib/seo";
 import { LegalLayout, LegalSection, LegalList, Term } from "@/components/site/LegalLayout";
 
 const PATH = "/privacy";
@@ -9,11 +9,6 @@ const TITLE = "Privacy Policy | CourseSmith AI Teaching Assistant";
 const DESCRIPTION =
   "How CourseSmith collects, uses, shares and safeguards your information when you use our AI-powered teacher assistant services.";
 const UPDATED = "2026-08-07";
-const CRUMBS = [
-  { name: "Home", path: "/" },
-  { name: "Privacy Policy", path: PATH },
-];
-
 const head = pageHead({
   path: PATH,
   title: TITLE,
@@ -23,10 +18,8 @@ const head = pageHead({
       path: PATH,
       title: TITLE,
       description: DESCRIPTION,
-      crumbs: CRUMBS,
       dateModified: UPDATED,
     }),
-    breadcrumbNode(PATH, CRUMBS),
   ],
 });
 
@@ -44,7 +37,6 @@ export default function Page() {
 function PrivacyPage() {
   return (
     <LegalLayout
-      path="/privacy"
       eyebrow="Legal"
       title="Privacy Policy"
       updated="August 7, 2026"

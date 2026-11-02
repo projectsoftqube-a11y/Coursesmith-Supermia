@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/seo/JsonLd";
-import { HubView, hubCrumbs, hubPages } from "@/components/site/content/HubView";
+import { HubView, hubPages } from "@/components/site/content/HubView";
 import { HUBS } from "@/content/hubs";
 import { hubHead } from "@/content/schema";
 
 const hub = HUBS["resources"];
-const head = hubHead(hub, hubCrumbs(hub), hubPages(hub));
+const head = hubHead(hub, hubPages(hub));
 
 export const metadata: Metadata = head.metadata;
 

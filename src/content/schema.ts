@@ -1,4 +1,4 @@
-import { ID, absoluteUrl, breadcrumbNode, pageHead, webPageNode, type Crumb } from "@/lib/seo";
+import { ID, absoluteUrl, pageHead, webPageNode } from "@/lib/seo";
 import type { CatalogEntry } from "./catalog";
 import { SITE_UPDATED, type Hub } from "./hubs";
 import { pagePath } from "./load";
@@ -22,7 +22,7 @@ function wordCount(page: ContentPage): number {
     .filter(Boolean).length;
 }
 
-export function contentPageHead(page: ContentPage, crumbs: Crumb[]) {
+export function contentPageHead(page: ContentPage) {
   const path = pagePath(page);
   const url = absoluteUrl(path);
   const graph: Record<string, unknown>[] = [
@@ -30,7 +30,6 @@ export function contentPageHead(page: ContentPage, crumbs: Crumb[]) {
       path,
       title: page.metaTitle,
       description: page.metaDescription,
-      crumbs,
       datePublished: page.datePublished,
       dateModified: page.dateModified,
       faqs: page.faqs,
@@ -39,7 +38,6 @@ export function contentPageHead(page: ContentPage, crumbs: Crumb[]) {
         ...(page.sources?.length ? { citation: page.sources.map((s) => s.url) } : {}),
       },
     }),
-    breadcrumbNode(path, crumbs),
   ];
 
   if (page.group === "resources") {
@@ -87,7 +85,7 @@ export function contentPageHead(page: ContentPage, crumbs: Crumb[]) {
   });
 }
 
-export function hubHead(hub: Hub, crumbs: Crumb[], pages: CatalogEntry[]) {
+export function hubHead(hub: Hub, pages: CatalogEntry[]) {
   const url = absoluteUrl(hub.path);
   return pageHead({
     path: hub.path,
@@ -99,13 +97,11 @@ export function hubHead(hub: Hub, crumbs: Crumb[], pages: CatalogEntry[]) {
         title: hub.metaTitle,
         description: hub.metaDescription,
         type: "CollectionPage",
-        crumbs,
         datePublished: SITE_UPDATED,
         dateModified: SITE_UPDATED,
         faqs: hub.faqs,
         extra: { hasPart: { "@id": `${url}#itemlist` } },
       }),
-      breadcrumbNode(hub.path, crumbs),
       {
         "@type": "ItemList",
         "@id": `${url}#itemlist`,

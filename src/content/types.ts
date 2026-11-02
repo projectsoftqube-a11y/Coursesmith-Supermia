@@ -31,7 +31,7 @@ export type Source = { label: string; url: string };
 export type ContentPage = {
   slug: string;
   group: ContentGroup;
-  /** Short label for menus and breadcrumbs, e.g. "AI Quiz Generator". */
+  /** Short label for menus and cards, e.g. "AI Quiz Generator". */
   navLabel: string;
   /** One line, at most 70 characters, for menus and hub cards. */
   navBlurb: string;

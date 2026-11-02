@@ -153,21 +153,6 @@ export function siteNodes(): JsonLd[] {
   ];
 }
 
-export type Crumb = { name: string; path: string };
-
-export function breadcrumbNode(path: string, crumbs: Crumb[]): JsonLd {
-  return {
-    "@type": "BreadcrumbList",
-    "@id": `${absoluteUrl(path)}#breadcrumb`,
-    itemListElement: crumbs.map((c, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      name: c.name,
-      item: absoluteUrl(c.path),
-    })),
-  };
-}
-
 export function faqEntities(faqs: { q: string; a: string }[]): JsonLd[] {
   return faqs.map((f) => ({
     "@type": "Question",
@@ -181,7 +166,6 @@ export type WebPageNodeInput = {
   title: string;
   description: string;
   type?: string | string[];
-  crumbs?: Crumb[];
   datePublished?: string;
   dateModified?: string;
   faqs?: { q: string; a: string }[];
@@ -205,9 +189,6 @@ export function webPageNode(input: WebPageNodeInput): JsonLd {
     about: input.about ?? { "@id": ID.software },
     primaryImageOfPage: { "@id": ID.ogImage },
     inLanguage: "en-US",
-    ...(input.crumbs && input.crumbs.length > 1
-      ? { breadcrumb: { "@id": `${url}#breadcrumb` } }
-      : {}),
     ...(input.datePublished ? { datePublished: input.datePublished } : {}),
     ...(input.dateModified ? { dateModified: input.dateModified } : {}),
     ...(input.faqs?.length ? { mainEntity: faqEntities(input.faqs) } : {}),
