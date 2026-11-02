@@ -83,7 +83,7 @@ function PricingCards() {
                       href={href}
                       {...(href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
                       className={cn(
-                        "cta-fill relative mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 text-center text-sm font-medium",
+                        "cta-fill relative mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 text-center text-sm font-medium [overflow-wrap:anywhere]",
                         featured
                           ? "bg-brand text-white hover:text-white"
                           : "border border-border bg-card text-primary hover:text-white",

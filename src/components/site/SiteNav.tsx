@@ -1,30 +1,112 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
+import { motion } from "motion/react";
+import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
+import {
+  ArrowLeftRight,
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  BookText,
+  Bot,
+  Building2,
+  CalendarRange,
+  ChevronDown,
+  CircleHelp,
+  ClipboardCheck,
+  FileQuestion,
+  FileText,
+  FlaskConical,
+  GraduationCap,
+  House,
+  Landmark,
+  LayoutTemplate,
+  MessagesSquare,
+  PencilRuler,
+  School,
+  Shapes,
+  Sigma,
+  Sparkles,
+  Trophy,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { catalogGroup, type CatalogEntry } from "@/content/catalog";
 import { HUBS } from "@/content/hubs";
 import type { ContentGroup } from "@/content/types";
-import { APP_URL } from "@/lib/seo";
-import Link from "next/link";
-import Image from "next/image";
+import { APP_URL, CONTACT_EMAIL } from "@/lib/seo";
+import { MobileMenu } from "./MobileMenu";
+
+type Icon = ComponentType<{ className?: string }>;
+
+/** One icon per destination, so the menus scan at a glance. */
+const ICONS: Record<string, Icon> = {
+  "/features/textbook-to-lesson-plan": BookOpen,
+  "/features/quiz-generator": ClipboardCheck,
+  "/features/curriculum-planner": CalendarRange,
+  "/features/ai-assignment-generator": PencilRuler,
+  "/features/ai-teaching-assistant": MessagesSquare,
+  "/use-cases/math": Sigma,
+  "/use-cases/science": FlaskConical,
+  "/use-cases/english-language-arts": BookText,
+  "/use-cases/social-studies": Landmark,
+  "/use-cases/elementary-school": Shapes,
+  "/use-cases/middle-school": School,
+  "/use-cases/high-school": GraduationCap,
+  "/use-cases/homeschool": House,
+  "/use-cases/schools-and-districts": Building2,
+  "/compare/chatgpt-for-lesson-planning": Bot,
+  "/compare/best-ai-tools-for-teachers": Trophy,
+  "/resources/how-to-write-a-lesson-plan": FileText,
+  "/resources/lesson-plan-template": LayoutTemplate,
+  "/resources/can-ai-write-lesson-plans": Sparkles,
+  "/resources/how-to-make-a-quiz-from-a-pdf": FileQuestion,
+  "/faq": CircleHelp,
+};
 
 type MenuDef = {
   group: ContentGroup;
-  /** Columns of the link grid inside the panel. */
-  cols: string;
+  label: string;
   items: CatalogEntry[];
+  feature: { href: string; title: string; text: string };
 };
 
 function menus(): MenuDef[] {
   return [
-    { group: "features", cols: "sm:grid-cols-2", items: catalogGroup("features") },
-    { group: "use-cases", cols: "sm:grid-cols-3", items: catalogGroup("use-cases") },
-    { group: "compare", cols: "sm:grid-cols-2", items: catalogGroup("compare") },
+    {
+      group: "features",
+      label: "Features",
+      items: catalogGroup("features"),
+      feature: {
+        href: "/features/textbook-to-lesson-plan",
+        title: "Start with your own textbook",
+        text: "Upload a PDF or Word file and plan every chapter from it.",
+      },
+    },
+    {
+      group: "use-cases",
+      label: "Use cases",
+      items: catalogGroup("use-cases"),
+      feature: {
+        href: "/use-cases/schools-and-districts",
+        title: "Planning for a whole department",
+        text: "Keep a shared textbook and pacing consistent across teachers.",
+      },
+    },
+    {
+      group: "compare",
+      label: "Compare",
+      items: catalogGroup("compare"),
+      feature: {
+        href: "/compare/best-ai-tools-for-teachers",
+        title: "The best AI tools for teachers",
+        text: "A fair guide, sorted by the job you need done.",
+      },
+    },
     {
       group: "resources",
-      cols: "sm:grid-cols-2",
+      label: "Resources",
       items: [
         ...catalogGroup("resources"),
         {
@@ -34,6 +116,11 @@ function menus(): MenuDef[] {
           blurb: "Uploads, lesson plans, tests, pricing and your data",
         },
       ],
+      feature: {
+        href: "/resources/lesson-plan-template",
+        title: "Free lesson plan template",
+        text: "A copy-ready template for a 45-minute class.",
+      },
     },
   ];
 }
@@ -41,33 +128,38 @@ function menus(): MenuDef[] {
 /** The schools audience page (the package's "For Schools" top-level item). */
 const FOR_SCHOOLS = "/use-cases/schools-and-districts";
 
-const MENU_LABEL: Record<ContentGroup, string> = {
-  features: "Features",
-  "use-cases": "Use cases",
-  compare: "Compare",
-  resources: "Resources",
+const ANNOUNCEMENT = {
+  href: "/features/curriculum-planner",
+  text: "Plan a whole term week by week with Academic Schedules",
 };
 
+function ItemIcon({ path, className }: { path: string; className?: string }) {
+  const Glyph = ICONS[path] ?? ArrowLeftRight;
+  return <Glyph className={className} />;
+}
+
 export function SiteNav() {
-  const { scrollY } = useScroll();
-  const [condensed, setCondensed] = useState(false);
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<ContentGroup | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
-  const pad = useTransform(scrollY, [0, 120], [22, 12]);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const closeMenu = useCallback(() => setOpen(false), []);
   const MENUS = menus();
+  const currentGroup = MENUS.find((m) => pathname.startsWith(HUBS[m.group].path))?.group;
 
   useEffect(() => {
-    const unsub = scrollY.on("change", (v) => setCondensed(v > 40));
-    return unsub;
-  }, [scrollY]);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setActive(null);
-        setOpen(false);
-      }
+      if (e.key === "Escape") setActive(null);
     };
     const onClick = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) setActive(null);
@@ -80,207 +172,278 @@ export function SiteNav() {
     };
   }, []);
 
+  const pillKey = hovered ?? active;
+
   return (
-    <motion.header
-      className="fixed inset-x-0 top-0 z-50"
-      style={{ paddingTop: pad }}
-      initial={{ y: -30, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-    >
-      <div className="mx-auto w-full max-w-[1400px] px-4 xs:px-6 md:px-10">
+    <header className="fixed inset-x-0 top-0 z-50 motion-safe:animate-in motion-safe:duration-700 motion-safe:fade-in motion-safe:slide-in-from-top-3">
+      {/* Announcement strip: folds away once the page scrolls */}
+      <div
+        className={`hidden overflow-hidden transition-[grid-template-rows] duration-500 md:grid ${
+          scrolled ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+        }`}
+      >
+        <div className="min-h-0">
+          <a
+            href={ANNOUNCEMENT.href}
+            className="group relative flex h-9 items-center justify-center gap-3 overflow-hidden bg-gradient-to-r from-primary via-[oklch(0.33_0.12_262)] to-primary text-xs font-medium text-white/85"
+          >
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/15 to-transparent motion-safe:animate-[sheen_5s_ease-in-out_infinite]"
+            />
+            <span className="relative inline-flex items-center gap-1 rounded-full bg-brand px-2 py-0.5 text-[11px] font-bold tracking-wide text-primary uppercase">
+              <Sparkles className="h-3 w-3" />
+              Feature
+            </span>
+            <span className="relative">{ANNOUNCEMENT.text}</span>
+            <ArrowRight className="relative h-3.5 w-3.5 text-brand-soft transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
+        </div>
+      </div>
+
+      <div
+        className={`mx-auto w-full max-w-[1400px] px-3 transition-[padding] duration-500 xs:px-6 md:px-10 ${
+          scrolled ? "pt-2" : "pt-3"
+        }`}
+      >
         <nav
           ref={navRef}
           aria-label="Main"
-          onMouseLeave={() => setActive(null)}
-          className={`relative flex items-center justify-between rounded-2xl px-3 py-2.5 transition-all duration-500 xs:px-4 xs:py-3 md:px-6 ${
-            condensed || active ? "glass shadow-soft" : "border border-transparent"
+          onMouseLeave={() => {
+            setActive(null);
+            setHovered(null);
+          }}
+          className={`relative rounded-full bg-gradient-to-r from-brand/40 via-border to-indigo-400/40 p-px transition-shadow duration-500 ${
+            scrolled || active ? "shadow-lift" : "shadow-soft"
           }`}
         >
-          <Link href="/" className="group flex min-w-0 shrink items-center">
-            <Image
-              width={233}
-              height={36}
-              src="/logo.png"
-              alt="CourseSmith home"
-              className="h-7 w-auto max-w-[160px] object-contain transition-transform duration-300 group-hover:scale-105 xs:h-8 xs:max-w-none md:h-9"
-            />
-          </Link>
+          <div
+            className={`flex h-14 items-center justify-between gap-3 rounded-full pr-2 pl-4 backdrop-blur-xl transition-colors duration-500 xs:pl-5 lg:h-[60px] ${
+              scrolled || active ? "bg-white/95" : "bg-white/80"
+            }`}
+          >
+            <Link href="/" className="group flex min-w-0 shrink items-center">
+              <Image
+                width={233}
+                height={36}
+                src="/logo.png"
+                alt="CourseSmith home"
+                priority
+                className="h-6 w-auto max-w-[140px] object-contain transition-transform duration-300 group-hover:scale-105 xs:h-7 xs:max-w-none"
+              />
+            </Link>
 
-          <ul className="hidden items-center gap-1 lg:flex">
-            {MENUS.map((m) => {
-              const isActive = active === m.group;
-              const panelId = `menu-${m.group}`;
-              return (
-                <li key={m.group} className="group/item" onMouseEnter={() => setActive(m.group)}>
-                  <button
-                    type="button"
-                    aria-expanded={isActive}
-                    aria-controls={panelId}
-                    onClick={() => setActive(isActive ? null : m.group)}
-                    className={`flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium transition-colors hover:text-primary ${
-                      isActive ? "bg-accent text-primary" : "text-muted-foreground"
-                    }`}
+            <ul className="hidden items-center lg:flex">
+              {MENUS.map((m) => {
+                const isActive = active === m.group;
+                const isCurrent = currentGroup === m.group;
+                const panelId = `menu-${m.group}`;
+                return (
+                  <li
+                    key={m.group}
+                    className="group/item"
+                    onMouseEnter={() => {
+                      setActive(m.group);
+                      setHovered(m.group);
+                    }}
                   >
-                    {MENU_LABEL[m.group]}
-                    <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform duration-300 ${isActive ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                  {/* Always rendered so every link is in the server HTML; hidden with CSS. */}
-                  <div
-                    id={panelId}
-                    className={`absolute inset-x-0 top-full pt-3 transition-all duration-200 ${
-                      isActive
-                        ? "visible translate-y-0 opacity-100"
-                        : "pointer-events-none invisible translate-y-1 opacity-0 group-focus-within/item:pointer-events-auto group-focus-within/item:visible group-focus-within/item:translate-y-0 group-focus-within/item:opacity-100"
-                    }`}
-                  >
-                    <MenuPanel menu={m} onNavigate={() => setActive(null)} />
-                  </div>
-                </li>
-              );
-            })}
-            <li>
-              <a
-                href={FOR_SCHOOLS}
-                className="rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                    <button
+                      type="button"
+                      aria-expanded={isActive}
+                      aria-controls={panelId}
+                      onClick={() => setActive(isActive ? null : m.group)}
+                      onFocus={() => setHovered(m.group)}
+                      className={`relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                        isActive || isCurrent
+                          ? "text-primary"
+                          : "text-muted-foreground hover:text-primary"
+                      }`}
+                    >
+                      {pillKey === m.group ? (
+                        <motion.span
+                          layoutId="nav-pill"
+                          className="absolute inset-0 -z-10 rounded-full bg-accent"
+                          transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                        />
+                      ) : null}
+                      {m.label}
+                      <ChevronDown
+                        className={`h-3.5 w-3.5 transition-transform duration-300 ${isActive ? "rotate-180 text-brand" : ""}`}
+                      />
+                      {isCurrent ? (
+                        <span className="absolute -bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-brand" />
+                      ) : null}
+                    </button>
+                    {/* Always rendered so every link is in the server HTML; shown with CSS. */}
+                    <div
+                      id={panelId}
+                      className={`absolute inset-x-0 top-full origin-top pt-3 transition-all duration-300 ease-out ${
+                        isActive
+                          ? "visible scale-100 opacity-100"
+                          : "pointer-events-none invisible scale-[0.98] opacity-0 group-focus-within/item:pointer-events-auto group-focus-within/item:visible group-focus-within/item:scale-100 group-focus-within/item:opacity-100"
+                      }`}
+                    >
+                      <MenuPanel menu={m} onNavigate={() => setActive(null)} />
+                    </div>
+                  </li>
+                );
+              })}
+              <li
+                onMouseEnter={() => {
+                  setActive(null);
+                  setHovered("schools");
+                }}
               >
-                For Schools
-              </a>
-            </li>
-          </ul>
+                <a
+                  href={FOR_SCHOOLS}
+                  onFocus={() => setHovered("schools")}
+                  className={`relative flex rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    pathname === FOR_SCHOOLS
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-primary"
+                  }`}
+                >
+                  {pillKey === "schools" ? (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 -z-10 rounded-full bg-accent"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  ) : null}
+                  For Schools
+                </a>
+              </li>
+            </ul>
 
-          <div className="flex shrink-0 items-center gap-2">
-            <a
-              href={APP_URL}
-              target="_blank"
-              rel="noopener"
-              className="hidden rounded-full px-3 py-2 text-sm font-medium text-primary transition-colors hover:text-brand xl:inline-flex"
-            >
-              Sign in
-            </a>
-            <a
-              href={APP_URL}
-              target="_blank"
-              rel="noopener"
-              className="cta-fill hidden rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-white sm:inline-flex"
-              style={{ ["--cta-fill" as string]: "var(--color-primary)" }}
-            >
-              Start Free
-            </a>
-            <button
-              aria-label="Toggle navigation"
-              aria-expanded={open}
-              onClick={() => setOpen((v) => !v)}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-primary lg:hidden"
-            >
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </button>
+            <div className="flex shrink-0 items-center gap-1.5">
+              <a
+                href={APP_URL}
+                target="_blank"
+                rel="noopener"
+                className="hidden rounded-full px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-accent xl:inline-flex"
+              >
+                Sign in
+              </a>
+              <a
+                href={APP_URL}
+                target="_blank"
+                rel="noopener"
+                className="group relative hidden items-center gap-1.5 overflow-hidden rounded-full bg-gradient-to-r from-brand via-sky-500 to-indigo-500 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-transform duration-300 hover:-translate-y-px sm:inline-flex"
+              >
+                <span className="absolute inset-y-0 -left-full w-1/2 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/40 to-transparent transition-[left] duration-700 group-hover:left-[130%]" />
+                <span className="relative">Start Free</span>
+                <ArrowUpRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+              <button
+                ref={toggleRef}
+                type="button"
+                aria-label="Open menu"
+                aria-expanded={open}
+                aria-controls="mobile-menu"
+                onClick={() => setOpen(true)}
+                className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary text-white transition-transform active:scale-95 lg:hidden"
+              >
+                <span className="absolute h-0.5 w-4 -translate-y-1 rounded-full bg-current" />
+                <span className="absolute h-0.5 w-4 translate-y-1 rounded-full bg-current" />
+              </button>
+            </div>
           </div>
         </nav>
-
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-2 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-2xl glass p-3 lg:hidden"
-          >
-            <ul className="grid gap-1">
-              {MENUS.map((m) => (
-                <li key={m.group}>
-                  <details className="group rounded-xl">
-                    <summary className="flex list-none items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold text-primary hover:bg-accent [&::-webkit-details-marker]:hidden">
-                      {MENU_LABEL[m.group]}
-                      <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-                    </summary>
-                    <ul className="grid gap-0.5 px-2 pt-1 pb-2">
-                      {m.items.map((i) => (
-                        <li key={i.path}>
-                          <a
-                            href={i.path}
-                            onClick={() => setOpen(false)}
-                            className="block rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-primary"
-                          >
-                            {i.label}
-                          </a>
-                        </li>
-                      ))}
-                      <li>
-                        <a
-                          href={HUBS[m.group].path}
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-brand"
-                        >
-                          All {MENU_LABEL[m.group].toLowerCase()}{" "}
-                          <ArrowRight className="h-3.5 w-3.5" />
-                        </a>
-                      </li>
-                    </ul>
-                  </details>
-                </li>
-              ))}
-              {[
-                { label: "For Schools", href: FOR_SCHOOLS },
-                { label: "Pricing", href: "/pricing" },
-                { label: "FAQ", href: "/faq" },
-                { label: "Sign in", href: APP_URL },
-                { label: "Start Free", href: APP_URL },
-              ].map((l) => (
-                <li key={l.label}>
-                  <a
-                    href={l.href}
-                    {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-primary hover:bg-accent"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
       </div>
-    </motion.header>
+
+      <MobileMenu
+        open={open}
+        onClose={closeMenu}
+        returnFocusTo={toggleRef}
+        appUrl={APP_URL}
+        email={CONTACT_EMAIL}
+        groups={MENUS.map((m) => ({
+          key: m.group,
+          label: m.label,
+          hub: { href: HUBS[m.group].path, label: `All ${m.label.toLowerCase()}` },
+          items: m.items.map((i) => ({
+            href: i.path,
+            label: i.label,
+            blurb: i.blurb,
+            icon: ICONS[i.path] ?? ArrowLeftRight,
+          })),
+        }))}
+        links={[
+          { label: "For Schools", href: FOR_SCHOOLS },
+          { label: "Pricing", href: "/pricing" },
+          { label: "FAQ", href: "/faq" },
+        ]}
+      />
+    </header>
   );
 }
 
 function MenuPanel({ menu, onNavigate }: { menu: MenuDef; onNavigate: () => void }) {
   const hub = HUBS[menu.group];
   return (
-    <div className="grid overflow-hidden rounded-3xl border border-border/80 bg-card shadow-lift lg:grid-cols-[1fr_280px]">
-      <ul className={`grid gap-1 p-4 ${menu.cols}`}>
-        {menu.items.map((i) => (
-          <li key={i.path}>
-            <a
-              href={i.path}
-              onClick={onNavigate}
-              className="group/link flex items-start gap-3 rounded-2xl p-3 transition-colors hover:bg-accent"
-            >
-              <span className="min-w-0">
-                <span className="block text-sm font-semibold text-ink group-hover/link:text-brand">
-                  {i.label}
+    <div className="overflow-hidden rounded-[28px] border border-border/80 bg-white shadow-lift">
+      <div className="grid lg:grid-cols-[1fr_320px]">
+        <ul className="grid content-start gap-1 p-3 sm:grid-cols-2 xl:p-4">
+          {menu.items.map((i) => (
+            <li key={i.path}>
+              <a
+                href={i.path}
+                onClick={onNavigate}
+                className="group/link flex items-start gap-3 rounded-2xl p-3 transition-colors hover:bg-surface"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand/15 to-indigo-500/10 text-brand transition-all duration-300 group-hover/link:from-brand group-hover/link:to-indigo-500 group-hover/link:text-white group-hover/link:shadow-glow">
+                  <ItemIcon path={i.path} className="h-[18px] w-[18px]" />
                 </span>
-                <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
-                  {i.blurb}
+                <span className="min-w-0">
+                  <span className="flex items-center gap-1 text-sm font-semibold text-ink">
+                    {i.label}
+                    <ArrowRight className="h-3.5 w-3.5 -translate-x-1 text-brand opacity-0 transition-all duration-300 group-hover/link:translate-x-0 group-hover/link:opacity-100" />
+                  </span>
+                  <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
+                    {i.blurb}
+                  </span>
                 </span>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="relative hidden overflow-hidden bg-primary p-6 text-white lg:block">
-        <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-brand/35 blur-[80px]" />
-        <p className="relative eyebrow !text-brand-soft">{hub.eyebrow}</p>
-        <p className="relative mt-3 font-display text-lg leading-snug font-extrabold">{hub.h1}</p>
-        <p className="relative mt-2 text-xs leading-relaxed text-white/70">{hub.intro}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <a
+          href={menu.feature.href}
+          onClick={onNavigate}
+          className="group/feature relative m-3 hidden overflow-hidden rounded-[22px] bg-gradient-to-br from-primary via-[oklch(0.3_0.11_262)] to-indigo-900 p-5 text-white lg:flex lg:flex-col"
+        >
+          <span className="pointer-events-none absolute inset-0 blueprint opacity-20" />
+          <span className="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full bg-brand/40 blur-[70px] transition-transform duration-700 group-hover/feature:scale-125" />
+          <span className="relative grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand to-indigo-500 shadow-glow transition-transform duration-500 group-hover/feature:scale-110 group-hover/feature:-rotate-6">
+            <ItemIcon path={menu.feature.href} className="h-6 w-6" />
+          </span>
+          <span className="relative mt-auto block pt-10">
+            <span className="inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-bold tracking-wider uppercase backdrop-blur">
+              Featured
+            </span>
+            <span className="mt-2 block font-display text-lg leading-tight font-extrabold">
+              {menu.feature.title}
+            </span>
+            <span className="mt-1 block text-xs leading-relaxed text-white/75">
+              {menu.feature.text}
+            </span>
+            <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-soft">
+              Explore
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/feature:translate-x-1" />
+            </span>
+          </span>
+        </a>
+      </div>
+
+      <div className="flex items-center justify-between gap-4 border-t border-border/70 bg-surface px-6 py-3">
+        <p className="text-xs text-muted-foreground">{hub.intro}</p>
         <a
           href={hub.path}
           onClick={onNavigate}
-          className="relative mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-soft hover:text-white"
+          className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand hover:text-primary"
         >
-          All {MENU_LABEL[menu.group].toLowerCase()} <ArrowRight className="h-4 w-4" />
+          All {menu.label.toLowerCase()} <ArrowRight className="h-4 w-4" />
         </a>
       </div>
     </div>
