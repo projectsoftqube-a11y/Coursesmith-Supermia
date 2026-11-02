@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Kalam, Nunito, Poppins } from "next/font/google";
 import type { ReactNode } from "react";
 
+import { Analytics, GtmNoscript } from "@/components/site/Analytics";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 import "./globals.css";
@@ -55,7 +56,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${nunito.variable} ${poppins.variable} ${kalam.variable}`}>
-      <body>{children}</body>
+      <Analytics />
+      <body>
+        <GtmNoscript />
+        {children}
+      </body>
     </html>
   );
 }
