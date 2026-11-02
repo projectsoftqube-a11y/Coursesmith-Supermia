@@ -1,19 +1,16 @@
 import type { ReactNode } from "react";
 import type { SitePage } from "@/content/site-pages";
+import { visualFor } from "@/content/visuals";
 import { ID, breadcrumbNode, pageHead, webPageNode, type Crumb } from "@/lib/seo";
-import { PageShell } from "./ContentPageView";
 import {
-  AnswerBlock,
-  Breadcrumbs,
-  Container,
+  BookShell,
+  Chapters,
   CtaBand,
-  EyebrowPill,
-  FaqList,
-  HeroBackdrop,
-  KeyTakeaways,
-  PageMeta,
+  FaqBand,
+  Overview,
+  PageHero,
   PrimaryCta,
-  SectionView,
+  slugify,
 } from "./blocks";
 
 export function sitePageCrumbs(page: SitePage): Crumb[] {
@@ -46,47 +43,28 @@ export function sitePageHead(page: SitePage, extra: Record<string, unknown>[] = 
   });
 }
 
-/** Template for pricing / about / contact: hero, optional feature band, article, FAQ. */
+/** Template for pricing / about / contact: opener, overview, chapters, questions. */
 export function SitePageView({ page, band }: { page: SitePage; band?: ReactNode }) {
+  const toc = [
+    ...page.sections.map((s) => ({ id: slugify(s.heading), label: s.heading })),
+    { id: "faq", label: "Review questions" },
+  ];
   return (
-    <PageShell>
-      <section className="relative isolate overflow-hidden bg-surface pt-28 pb-14 md:pt-36 md:pb-20">
-        <HeroBackdrop />
-        <Container>
-          <Breadcrumbs crumbs={sitePageCrumbs(page)} />
-          <div className="mt-8 grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="motion-safe:animate-in motion-safe:duration-700 motion-safe:slide-in-from-bottom-3 lg:col-span-7">
-              <EyebrowPill>{page.eyebrow}</EyebrowPill>
-              <h1 className="mt-5 font-display text-[2.125rem] leading-[1.08] font-extrabold tracking-tight text-ink xs:text-4xl sm:text-5xl lg:text-[3.4rem]">
-                {page.h1}
-              </h1>
-              <AnswerBlock text={page.answer} />
-              <div className="mt-7">
-                <PrimaryCta />
-              </div>
-              <PageMeta updated={page.dateModified} />
-            </div>
-            <div className="lg:col-span-5 lg:pt-12">
-              <KeyTakeaways items={page.takeaways} />
-            </div>
-          </div>
-        </Container>
-      </section>
-
+    <BookShell>
+      <PageHero
+        crumbs={sitePageCrumbs(page)}
+        eyebrow={page.eyebrow}
+        title={page.h1}
+        answer={page.answer}
+        visual={visualFor(page.path)}
+        updated={page.dateModified}
+        actions={<PrimaryCta />}
+      />
       {band}
-
-      <section className="bg-background py-14 md:py-20">
-        <Container>
-          <article className="mx-auto max-w-3xl space-y-12">
-            {page.sections.map((s) => (
-              <SectionView key={s.heading} section={s} />
-            ))}
-            <FaqList faqs={page.faqs} />
-          </article>
-        </Container>
-      </section>
-
+      <Overview toc={toc} takeaways={page.takeaways} />
+      <Chapters sections={page.sections} seed={page.path} />
+      <FaqBand faqs={page.faqs} />
       <CtaBand />
-    </PageShell>
+    </BookShell>
   );
 }

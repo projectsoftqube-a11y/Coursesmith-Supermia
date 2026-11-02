@@ -44,6 +44,7 @@ export default function Page() {
 function TermsPage() {
   return (
     <LegalLayout
+      path="/terms"
       eyebrow="Legal"
       title="Terms of Service"
       updated="August 7, 2026"

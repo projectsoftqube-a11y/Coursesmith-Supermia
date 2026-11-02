@@ -44,6 +44,7 @@ export default function Page() {
 function PrivacyPage() {
   return (
     <LegalLayout
+      path="/privacy"
       eyebrow="Legal"
       title="Privacy Policy"
       updated="August 7, 2026"

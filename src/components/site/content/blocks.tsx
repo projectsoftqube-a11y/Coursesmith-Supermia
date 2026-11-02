@@ -1,14 +1,22 @@
-import { ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronDown, Clock3 } from "lucide-react";
-import type { ReactNode } from "react";
+import { ArrowRight, ArrowUpRight, Menu, Plus, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import type { CSSProperties, ReactNode } from "react";
+import { catalogGroup, describePath, type CatalogEntry } from "@/content/catalog";
+import { HUBS } from "@/content/hubs";
+import type { ContentGroup, ContentSection, ContentTable, Faq, Source } from "@/content/types";
+import { visualFor, type Visual } from "@/content/visuals";
+import { APP_URL, CONTACT_EMAIL, type Crumb } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { APP_URL, type Crumb } from "@/lib/seo";
-import { describePath } from "@/content/catalog";
-import type { ContentSection, ContentTable, Faq, Source } from "@/content/types";
+
+import { figtree, fraunces } from "./fonts";
+import "./book.css";
 
 /**
- * Building blocks shared by every inner page. All content renders in the server
- * HTML (no conditional mounting), so crawlers that skip JavaScript still see the
- * answer block, every FAQ answer and the full body copy.
+ * Parts of the inner-page "textbook". Everything renders on the server with no
+ * client JavaScript: motion and layout live in book.css, so crawlers that skip
+ * scripts still get the answer block, every FAQ answer and the full copy.
+ * Internal links are plain anchors so pages use cross-document view transitions.
  */
 
 export function slugify(text: string): string {
@@ -29,227 +37,405 @@ export function formatDate(iso: string): string {
   });
 }
 
-/** Hero background: zigzag crayon strokes, blueprint grid and a brand glow. */
-export function HeroBackdrop() {
-  return (
-    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <div className="absolute -inset-24 -rotate-6 zigzag [mask-image:linear-gradient(115deg,black_0%,black_14%,transparent_42%)] opacity-35" />
-      <div className="absolute inset-0 blueprint [mask-image:radial-gradient(75%_65%_at_50%_40%,black,transparent)] opacity-30" />
-      <div className="absolute -top-40 left-1/2 h-[460px] w-[820px] -translate-x-1/2 rounded-full bg-brand/12 blur-[140px]" />
-      <div className="absolute -right-32 bottom-0 h-[320px] w-[420px] rounded-full bg-indigo-400/10 blur-[120px]" />
-    </div>
-  );
+/* ---------------------------------------------------------------- chrome */
+
+const MENU: { group: ContentGroup; label: string }[] = [
+  { group: "features", label: "Features" },
+  { group: "use-cases", label: "Use cases" },
+  { group: "compare", label: "Compare" },
+  { group: "resources", label: "Resources" },
+];
+
+const FOR_SCHOOLS = "/use-cases/schools-and-districts";
+
+const FAQ_ENTRY: CatalogEntry = {
+  path: "/faq",
+  group: "resources",
+  label: "CourseSmith FAQ",
+  blurb: "Uploads, lesson plans, tests, pricing and your data",
+};
+
+function menuEntries(group: ContentGroup): CatalogEntry[] {
+  return group === "resources" ? [...catalogGroup(group), FAQ_ENTRY] : catalogGroup(group);
 }
 
-export function Container({ children, className }: { children: ReactNode; className?: string }) {
+function Masthead() {
   return (
-    <div className={cn("mx-auto w-full max-w-[1300px] px-4 xs:px-6 md:px-10", className)}>
-      {children}
-    </div>
-  );
-}
+    <header className="masthead">
+      <nav aria-label="Main" className="wrap masthead-bar">
+        <Link href="/" className="masthead-logo">
+          <Image src="/logo.png" alt="CourseSmith home" width={233} height={36} priority />
+        </Link>
 
-export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
-  return (
-    <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-muted-foreground sm:text-sm">
-        {crumbs.map((c, i) => {
-          const last = i === crumbs.length - 1;
-          return (
-            <li key={c.path} className="flex items-center gap-2">
-              {last ? (
-                <span aria-current="page" className="text-ink">
-                  {c.name}
-                </span>
-              ) : (
-                <>
-                  <a href={c.path} className="transition-colors hover:text-brand">
-                    {c.name}
-                  </a>
-                  <span aria-hidden="true" className="text-border">
-                    /
-                  </span>
-                </>
-              )}
+        <ul className="masthead-menu">
+          {MENU.map(({ group, label }) => (
+            <li key={group}>
+              <a href={HUBS[group].path}>{label}</a>
+              <div className="panel">
+                <div className="wrap panel-grid">
+                  <div>
+                    <p className="kicker">{label}</p>
+                    <p className="panel-title">{HUBS[group].h1}</p>
+                  </div>
+                  <ul className="panel-links">
+                    {menuEntries(group).map((e) => (
+                      <li key={e.path}>
+                        <a href={e.path}>
+                          <strong>{e.label}</strong>
+                          <span>{e.blurb}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </li>
-          );
-        })}
-      </ol>
-    </nav>
+          ))}
+          <li>
+            <a href={FOR_SCHOOLS}>For Schools</a>
+          </li>
+        </ul>
+
+        <div className="masthead-actions">
+          <a href={APP_URL} className="masthead-signin" target="_blank" rel="noopener">
+            Sign in
+          </a>
+          <a href={APP_URL} className="btn btn--solid" target="_blank" rel="noopener">
+            Start free
+          </a>
+          <button
+            type="button"
+            className="menu-toggle"
+            popoverTarget="site-menu"
+            aria-label="Open menu"
+          >
+            <Menu aria-hidden="true" />
+          </button>
+        </div>
+      </nav>
+
+      <div id="site-menu" popover="auto" className="menu-sheet">
+        <button
+          type="button"
+          className="menu-toggle menu-close"
+          popoverTarget="site-menu"
+          popoverTargetAction="hide"
+          aria-label="Close menu"
+        >
+          <X aria-hidden="true" />
+        </button>
+        {MENU.map(({ group, label }) => (
+          <details key={group} name="site-menu">
+            <summary>{label}</summary>
+            <ul>
+              <li>
+                <a href={HUBS[group].path}>{HUBS[group].label} overview</a>
+              </li>
+              {menuEntries(group).map((e) => (
+                <li key={e.path}>
+                  <a href={e.path}>{e.label}</a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
+        <a href={FOR_SCHOOLS}>For Schools</a>
+        <a href="/pricing">Pricing</a>
+        <a href={APP_URL} target="_blank" rel="noopener">
+          Sign in
+        </a>
+      </div>
+    </header>
   );
 }
 
-export function EyebrowPill({ children }: { children: ReactNode }) {
+function BackCover() {
+  const cols = [
+    ...MENU.map(({ group, label }) => ({
+      title: label,
+      href: HUBS[group].path,
+      links: catalogGroup(group).map((e) => ({ label: e.label, href: e.path })),
+    })),
+    {
+      title: "Company",
+      href: "/about",
+      links: [
+        { label: "About CourseSmith", href: "/about" },
+        { label: "Pricing", href: "/pricing" },
+        { label: "Contact", href: "/contact" },
+        { label: "How it works", href: "/#workflow" },
+        { label: "FAQ", href: "/faq" },
+      ],
+    },
+  ];
+
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-card px-4 py-1.5 eyebrow text-brand-strong! shadow-soft">
-      <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-      {children}
-    </span>
+    <footer className="backcover">
+      <div className="wrap">
+        <div className="backcover-top">
+          <div className="backcover-brand">
+            <Image src="/logo.png" alt="CourseSmith" width={233} height={36} />
+            <p>
+              CourseSmith is the AI teaching operating system designed by SuperMIA to give teachers
+              their time back.
+            </p>
+            <address>
+              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              <br />
+              <a href="https://supermia.ai" target="_blank" rel="noopener">
+                supermia.ai
+              </a>
+              <br />
+              <a href="https://supermia.ai/ai-coursesmith/" target="_blank" rel="noopener">
+                CourseSmith on SuperMIA
+              </a>
+              <br />
+              2451 W Grapevine Mills Cir #547, Grapevine, TX 76051
+            </address>
+          </div>
+          <nav aria-label="Footer" className="backcover-cols">
+            {cols.map((c) => (
+              <section key={c.title}>
+                <h2>
+                  <a href={c.href}>{c.title}</a>
+                </h2>
+                <ul>
+                  {c.links.map((l) => (
+                    <li key={l.href}>
+                      <a href={l.href}>{l.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </nav>
+        </div>
+        <div className="backcover-legal">
+          <ul>
+            <li>© {process.env.BUILD_YEAR} CourseSmith by SuperMIA. All rights reserved.</li>
+            <li>
+              <a href="/privacy">Privacy Policy</a>
+            </li>
+            <li>
+              <a href="/terms">Terms of Service</a>
+            </li>
+          </ul>
+          <p>
+            by{" "}
+            <a href="https://supermia.ai" target="_blank" rel="noopener">
+              SuperMIA
+            </a>{" "}
+            · Botfinity Inc. | Design &amp; Develop by{" "}
+            <a href="https://softqubes.com/" target="_blank" rel="noopener">
+              Softqube Technologies LLC
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
   );
 }
 
-/** The 40–60 word standalone answer. `.answer-block` is a speakable selector. */
-export function AnswerBlock({ text, label = "Quick answer" }: { text: string; label?: string }) {
+/** Skip link, reading progress, masthead, content and back cover for any inner page. */
+export function BookShell({ children }: { children: ReactNode }) {
   return (
-    <div className="relative mt-7 overflow-hidden rounded-2xl border border-brand/25 bg-card/95 p-5 shadow-soft backdrop-blur sm:p-6">
-      <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-brand via-sky-500 to-indigo-600" />
-      <p className="eyebrow text-brand-strong!">{label}</p>
-      <p className="answer-block mt-2 text-base leading-relaxed text-ink sm:text-[1.0625rem]">
-        {text}
-      </p>
+    <div className={cn("book", fraunces.variable, figtree.variable)}>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <div className="progress" aria-hidden="true" />
+      <Masthead />
+      <main id="main">{children}</main>
+      <BackCover />
     </div>
   );
 }
+
+/* --------------------------------------------------------------- buttons */
 
 export function PrimaryCta({ children = "Start free for teachers" }: { children?: ReactNode }) {
   return (
-    <a
-      href={APP_URL}
-      target="_blank"
-      rel="noopener"
-      className="cta-fill inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-soft hover:text-white"
-      style={{ ["--cta-fill" as string]: "var(--color-primary)" }}
-    >
+    <a href={APP_URL} target="_blank" rel="noopener" className="btn btn--solid">
       {children}
-      <ArrowUpRight className="h-4 w-4" />
+      <ArrowUpRight aria-hidden="true" />
     </a>
   );
 }
 
 export function SecondaryCta({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <a
-      href={href}
-      className="cta-fill inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-6 py-3.5 text-sm font-semibold text-primary hover:border-brand/40 hover:text-white"
-      style={{ ["--cta-fill" as string]: "var(--color-primary)" }}
-    >
+    <a href={href} className="btn btn--line">
       {children}
-      <ArrowRight className="h-4 w-4" />
+      <ArrowRight aria-hidden="true" />
     </a>
   );
 }
 
-export function PageMeta({ updated, minutes }: { updated: string; minutes?: number }) {
-  return (
-    <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-medium text-muted-foreground sm:text-sm">
-      <span className="inline-flex items-center gap-1.5">
-        <CalendarDays className="h-4 w-4 text-brand" />
-        Last updated <time dateTime={updated}>{formatDate(updated)}</time>
-      </span>
-      {minutes ? (
-        <span className="inline-flex items-center gap-1.5">
-          <Clock3 className="h-4 w-4 text-brand" />
-          {minutes} min read
-        </span>
-      ) : null}
-    </p>
-  );
+/* ---------------------------------------------------------------- opener */
+
+/** Sets the closing words apart so they can take the highlighter. */
+function accentSplit(text: string, words = 3) {
+  const parts = text.split(" ");
+  if (parts.length <= words) return { lead: "", accent: text };
+  return { lead: parts.slice(0, -words).join(" "), accent: parts.slice(-words).join(" ") };
 }
 
-/** Navy card of standalone takeaways. `.key-takeaways` is a speakable selector. */
-export function KeyTakeaways({
-  items,
-  title = "Key takeaways",
-}: {
-  items: string[];
-  title?: string;
-}) {
+function RunningHead({ crumbs, updated }: { crumbs: Crumb[]; updated?: string }) {
   return (
-    <aside
-      aria-labelledby="key-takeaways"
-      className="relative overflow-hidden rounded-3xl bg-primary p-6 text-primary-foreground shadow-lift sm:p-8"
-    >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -inset-24 -rotate-6 zigzag [mask-image:linear-gradient(200deg,black_0%,black_30%,transparent_70%)] opacity-20" />
-        <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-brand/30 blur-[90px]" />
-      </div>
-      <div className="relative">
-        <h2
-          id="key-takeaways"
-          className="font-display text-xl font-extrabold tracking-tight text-white sm:text-2xl"
-        >
-          {title}
-        </h2>
-        <ul className="key-takeaways mt-5 space-y-4">
-          {items.map((t) => (
-            <li key={t} className="flex items-start gap-3 text-sm leading-relaxed text-white/85">
-              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand/25 text-brand-soft">
-                <Check className="h-3 w-3" strokeWidth={3} />
-              </span>
-              <span>{t}</span>
+    <div className="running-head">
+      <nav aria-label="Breadcrumb">
+        <ol>
+          {crumbs.map((c, i) => (
+            <li key={c.path}>
+              {i === crumbs.length - 1 ? (
+                <span aria-current="page">{c.name}</span>
+              ) : (
+                <a href={c.path}>{c.name}</a>
+              )}
             </li>
           ))}
-        </ul>
+        </ol>
+      </nav>
+      {updated ? (
+        <p>
+          Last updated <time dateTime={updated}>{formatDate(updated)}</time>
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+/** Chapter opener. `.answer-block` is a speakable selector. */
+export function PageHero({
+  crumbs,
+  eyebrow,
+  title,
+  answer,
+  answerLabel = "Quick answer",
+  visual,
+  actions,
+  updated,
+  minutes,
+}: {
+  crumbs: Crumb[];
+  eyebrow: string;
+  title: string;
+  answer: string;
+  answerLabel?: string;
+  visual: Visual;
+  actions?: ReactNode;
+  updated?: string;
+  minutes?: number;
+}) {
+  const { lead, accent } = accentSplit(title);
+  return (
+    <header className="opener">
+      <div className="wrap">
+        <RunningHead crumbs={crumbs} {...(updated ? { updated } : {})} />
+        <p className="kicker opener-kicker">{eyebrow}</p>
+        <h1 className="opener-title">
+          {lead ? `${lead} ` : null}
+          <em>{accent}</em>
+        </h1>
+        <div className="opener-body">
+          <div>
+            <p className="kicker opener-label">{answerLabel}</p>
+            <p className="answer-block">{answer}</p>
+            {actions ? <div className="opener-actions">{actions}</div> : null}
+            {minutes ? (
+              <p className="opener-meta">
+                <span>{minutes} min read</span>
+              </p>
+            ) : null}
+          </div>
+          <figure className="taped">
+            <div className="taped-photo">
+              <Image
+                src={visual.src}
+                alt={visual.alt}
+                fill
+                priority
+                sizes="(min-width: 900px) 40vw, 100vw"
+              />
+            </div>
+            <figcaption className="note">{visual.alt}</figcaption>
+          </figure>
+        </div>
       </div>
-    </aside>
+    </header>
   );
 }
 
-export function Definition({ term, text }: { term: string; text: string }) {
+/* -------------------------------------------------------------- overview */
+
+export type TocItem = { id: string; label: string };
+
+/** Table of contents beside the legal-pad summary. `.key-takeaways` is speakable. */
+export function Overview({ toc, takeaways }: { toc: TocItem[]; takeaways: string[] }) {
   return (
-    <dl className="rounded-2xl border border-border/80 bg-surface p-5 sm:p-6">
-      <dt className="eyebrow text-brand-strong!">Definition: {term}</dt>
-      <dd className="mt-2 text-base leading-relaxed text-ink">{text}</dd>
-    </dl>
+    <section className="overview" aria-label="Page overview">
+      <div className="wrap overview-grid">
+        <nav className="toc" aria-labelledby="contents">
+          <h2 id="contents">In this guide</h2>
+          <ol>
+            {toc.map((item) => (
+              <li key={item.id}>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <aside className="pad" aria-labelledby="key-takeaways">
+          <h2 id="key-takeaways">Key takeaways</h2>
+          <ul className="key-takeaways">
+            {takeaways.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        </aside>
+      </div>
+    </section>
   );
 }
 
-export function BulletList({ items }: { items: string[] }) {
+export function KeyTerm({ term, text }: { term: string; text: string }) {
   return (
-    <ul className="space-y-3">
-      {items.map((item) => (
-        <li key={item} className="flex items-start gap-3">
-          <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
-          <span className="min-w-0 flex-1">{item}</span>
-        </li>
-      ))}
-    </ul>
+    <section className="keyterm" aria-label="Key term">
+      <dl className="wrap">
+        <dt>Key term: {term}</dt>
+        <dd>{text}</dd>
+      </dl>
+    </section>
   );
 }
 
-export function StepList({ steps }: { steps: { name: string; text: string }[] }) {
-  return (
-    <ol className="relative space-y-5 border-l-2 border-dashed border-brand/30 pl-8">
-      {steps.map((s, i) => (
-        <li key={s.name} className="relative">
-          <span className="absolute top-0 -left-[2.95rem] grid h-9 w-9 place-items-center rounded-xl bg-brand font-display text-sm font-extrabold text-white shadow-glow">
-            {i + 1}
-          </span>
-          <h3 className="font-display text-lg font-extrabold text-ink">{s.name}</h3>
-          <p className="mt-1.5">{s.text}</p>
-        </li>
-      ))}
-    </ol>
-  );
-}
+/* -------------------------------------------------------------- chapters */
 
-/** A genuine <table>: answer engines parse these far better than styled divs. */
-export function DataTable({ table }: { table: ContentTable }) {
+function DataTable({ table }: { table: ContentTable }) {
+  const ours = table.columns.findIndex((c) => /coursesmith/i.test(c));
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border/80 bg-card shadow-soft">
-      <table className="w-full min-w-[560px] border-collapse text-left text-sm">
-        <caption className="caption-bottom border-t border-border/70 px-5 py-3 text-left text-xs text-muted-foreground">
-          {table.caption}
-        </caption>
+    <div className="table-scroll rise" role="region" aria-label={table.caption} tabIndex={0}>
+      <table className="data">
+        <caption>{table.caption}</caption>
         <thead>
-          <tr className="bg-primary text-white">
-            {table.columns.map((c) => (
-              <th key={c} scope="col" className="px-5 py-3.5 font-display font-bold">
+          <tr>
+            {table.columns.map((c, i) => (
+              <th key={c} scope="col" className={i === ours ? "is-ours" : undefined}>
                 {c}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {table.rows.map((row, ri) => (
-            <tr key={ri} className="border-t border-border/70 even:bg-surface/70">
-              {row.map((cell, ci) =>
-                ci === 0 ? (
-                  <th key={ci} scope="row" className="px-5 py-3.5 align-top font-semibold text-ink">
+          {table.rows.map((row, r) => (
+            <tr key={r}>
+              {row.map((cell, c) =>
+                c === 0 ? (
+                  <th key={c} scope="row">
                     {cell}
                   </th>
                 ) : (
-                  <td key={ci} className="px-5 py-3.5 align-top leading-relaxed">
+                  <td key={c} className={c === ours ? "is-ours" : undefined}>
                     {cell}
                   </td>
                 ),
@@ -262,71 +448,248 @@ export function DataTable({ table }: { table: ContentTable }) {
   );
 }
 
-export function SectionView({ section }: { section: ContentSection }) {
+function Checks({ items }: { items: string[] }) {
   return (
-    <section id={slugify(section.heading)} className="scroll-mt-28">
-      <h2 className="font-display text-2xl leading-tight font-extrabold tracking-tight text-ink sm:text-[1.875rem]">
-        {section.heading}
-      </h2>
-      <div className="mt-4 space-y-4 text-base leading-relaxed text-muted-foreground">
-        {section.paragraphs.map((p) => (
-          <p key={p}>{p}</p>
-        ))}
-        {section.bullets ? <BulletList items={section.bullets} /> : null}
-        {section.steps ? (
-          <div className="pt-2">
-            <StepList steps={section.steps} />
-          </div>
-        ) : null}
-        {section.table ? (
-          <div className="pt-2">
-            <DataTable table={section.table} />
-          </div>
-        ) : null}
+    <ul className="checks">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+const timelineName = (index: number) => `--chapter-${index + 1}`;
+
+/** Text chapter: sticky heading beside the copy, sides alternating. */
+function SplitChapter({
+  section,
+  index,
+  seed,
+}: {
+  section: ContentSection;
+  index: number;
+  seed: string;
+}) {
+  const id = slugify(section.heading);
+  const visual = index % 3 === 1 ? visualFor(seed, index + 1) : null;
+  return (
+    <section
+      id={id}
+      aria-labelledby={`${id}-h`}
+      className={cn("chapter", index % 2 === 1 && "chapter--flip")}
+      style={{ viewTimelineName: timelineName(index) } as CSSProperties}
+    >
+      <div className="wrap chapter-grid">
+        <header className="chapter-head">
+          <span className="chapter-num" aria-hidden="true" />
+          <h2 id={`${id}-h`}>{section.heading}</h2>
+        </header>
+        <div className="chapter-copy">
+          {section.paragraphs.map((p) => (
+            <p key={p} className="rise">
+              {p}
+            </p>
+          ))}
+          {section.bullets ? <Checks items={section.bullets} /> : null}
+          {visual ? (
+            <figure className="fig">
+              <div className="fig-photo">
+                <Image
+                  src={visual.src}
+                  alt={visual.alt}
+                  fill
+                  sizes="(min-width: 1000px) 55vw, 100vw"
+                />
+              </div>
+              <figcaption>{visual.alt}.</figcaption>
+            </figure>
+          ) : null}
+        </div>
       </div>
     </section>
   );
 }
 
+/** Data chapter: heading and note above a table that runs the full width. */
+function TableChapter({ section, index }: { section: ContentSection; index: number }) {
+  const id = slugify(section.heading);
+  return (
+    <section
+      id={id}
+      aria-labelledby={`${id}-h`}
+      className="chapter chapter--table"
+      style={{ viewTimelineName: timelineName(index) } as CSSProperties}
+    >
+      <div className="wrap">
+        <div className="chapter-grid">
+          <header>
+            <span className="chapter-num" aria-hidden="true" />
+            <h2 id={`${id}-h`}>{section.heading}</h2>
+          </header>
+          <div className="chapter-copy">
+            {section.paragraphs.map((p) => (
+              <p key={p} className="rise">
+                {p}
+              </p>
+            ))}
+            {section.bullets ? <Checks items={section.bullets} /> : null}
+          </div>
+        </div>
+        {section.table ? <DataTable table={section.table} /> : null}
+      </div>
+    </section>
+  );
+}
+
+/** Procedure chapter on the chalkboard. Four or more steps pin and travel sideways. */
+function StepsChapter({ section, index }: { section: ContentSection; index: number }) {
+  const id = slugify(section.heading);
+  const steps = section.steps ?? [];
+  const name = timelineName(index);
+  return (
+    <section
+      id={id}
+      aria-labelledby={`${id}-h`}
+      className={cn("chapter board", steps.length > 3 && "board--pin")}
+      style={
+        {
+          viewTimelineName: name,
+          "--timeline": name,
+          "--steps": steps.length,
+          paddingBlock: 0,
+        } as CSSProperties
+      }
+    >
+      <div className="board-frame">
+        <div className="wrap board-head">
+          <header>
+            <span className="chapter-num" aria-hidden="true" />
+            <h2 id={`${id}-h`}>{section.heading}</h2>
+          </header>
+          <div className="board-copy">
+            {section.paragraphs.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+            {section.bullets ? (
+              <ul>
+                {section.bullets.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </div>
+        <ol className="board-track">
+          {steps.map((step) => (
+            <li key={step.name} className="board-step">
+              <h3>{step.name}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/** Picks the chapter layout from what the section actually contains. */
+export function Chapter({
+  section,
+  index,
+  seed,
+}: {
+  section: ContentSection;
+  index: number;
+  seed: string;
+}) {
+  if (section.steps?.length) return <StepsChapter section={section} index={index} />;
+  if (section.table) return <TableChapter section={section} index={index} />;
+  return <SplitChapter section={section} index={index} seed={seed} />;
+}
+
+/** Article body with thumb tabs on the page edge that follow the chapter in view. */
+export function Chapters({ sections, seed }: { sections: ContentSection[]; seed: string }) {
+  return (
+    <div
+      style={{ timelineScope: sections.map((_, i) => timelineName(i)).join(", ") } as CSSProperties}
+    >
+      <article>
+        {sections.map((section, index) => (
+          <Chapter key={section.heading} section={section} index={index} seed={seed} />
+        ))}
+      </article>
+      <nav className="tabs" aria-label="Chapters">
+        <ol>
+          {sections.map((section, index) => (
+            <li key={section.heading}>
+              <a
+                href={`#${slugify(section.heading)}`}
+                title={section.heading}
+                aria-label={section.heading}
+                style={{ animationTimeline: timelineName(index) } as CSSProperties}
+              >
+                {index + 1}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+  );
+}
+
+/* --------------------------------------------------------- closing parts */
+
 /**
- * FAQ list on native <details>: every answer is in the server HTML and the text
- * is the exact string fed to FAQPage schema.
+ * Native <details>: every answer is in the server HTML, and the text is the exact
+ * string fed to FAQPage schema.
  */
-export function FaqList({
+export function FaqBand({
   faqs,
-  heading = "Frequently asked questions",
+  heading = "Review questions",
   id = "faq",
   intro,
   openFirst = true,
+  tinted,
+  mascot = true,
 }: {
   faqs: Faq[];
   heading?: string;
   id?: string;
   intro?: string;
   openFirst?: boolean;
+  tinted?: boolean;
+  mascot?: boolean;
 }) {
   return (
-    <section id={id} className="scroll-mt-28">
-      <h2 className="font-display text-2xl font-extrabold tracking-tight text-ink sm:text-[1.875rem]">
-        {heading}
-      </h2>
-      {intro ? <p className="mt-2 text-base text-muted-foreground">{intro}</p> : null}
-      <div className="mt-5 space-y-3">
-        {faqs.map((f, i) => (
-          <details
-            key={f.q}
-            open={openFirst && i === 0}
-            className="group rounded-2xl border border-border/80 bg-card shadow-soft transition-shadow open:shadow-lift"
-          >
-            <summary className="flex list-none items-center justify-between gap-4 p-5 text-left font-display text-base font-bold text-ink transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
-              <h3 className="text-base font-bold">{f.q}</h3>
-              <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180 group-open:text-brand" />
-            </summary>
-            <p className="border-t border-border/50 px-5 pt-4 pb-5 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {f.a}
-            </p>
-          </details>
-        ))}
+    <section id={id} aria-labelledby={`${id}-h`} className={cn("review", tinted && "review--tint")}>
+      <div className="wrap review-grid">
+        <div className="review-side">
+          <p className="kicker">Check your understanding</p>
+          <h2 id={`${id}-h`}>{heading}</h2>
+          {intro ? <p className="review-intro">{intro}</p> : null}
+          {mascot ? (
+            <div className="review-fox">
+              <Image src="/mascot-left.webp" alt="" width={400} height={605} />
+              <p className="note">
+                Still stuck? Ask at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              </p>
+            </div>
+          ) : null}
+        </div>
+        <div className="review-list">
+          {faqs.map((f, i) => (
+            <details key={f.q} className="qa" open={openFirst && i === 0}>
+              <summary>
+                <h3>{f.q}</h3>
+                <span className="qa-mark" aria-hidden="true">
+                  <Plus size={16} />
+                </span>
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -334,69 +697,27 @@ export function FaqList({
 
 export function SourceList({ sources }: { sources: Source[] }) {
   return (
-    <section
-      id="sources"
-      className="scroll-mt-28 rounded-2xl border border-border/80 bg-surface p-5 sm:p-6"
-    >
-      <h2 className="font-display text-lg font-extrabold text-ink">Sources</h2>
-      <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm">
-        {sources.map((s) => (
-          <li key={s.url}>
-            <a
-              href={s.url}
-              target="_blank"
-              rel="noopener"
-              className="break-words text-primary underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
-            >
-              {s.label}
-            </a>
-          </li>
-        ))}
-      </ol>
+    <section id="sources" className="references" aria-labelledby="sources-h">
+      <div className="wrap references-grid">
+        <h2 id="sources-h">References</h2>
+        <ol>
+          {sources.map((s) => (
+            <li key={s.url}>
+              <a href={s.url} target="_blank" rel="noopener">
+                {s.label}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
   );
 }
 
-export function LinkCard({
-  href,
-  title,
-  blurb,
-  badge,
-  headingLevel = "h3",
-}: {
-  href: string;
-  title: string;
-  blurb: string;
-  badge?: string;
-  headingLevel?: "h2" | "h3";
-}) {
-  const Heading = headingLevel;
-  return (
-    <a
-      href={href}
-      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-lift"
-    >
-      <span className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-brand/0 blur-3xl transition-colors duration-500 group-hover:bg-brand/15" />
-      {badge ? (
-        <span className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand to-indigo-600 font-display text-sm font-extrabold text-white shadow-glow">
-          {badge}
-        </span>
-      ) : null}
-      <Heading className="font-display text-lg leading-snug font-extrabold text-ink transition-colors group-hover:text-brand">
-        {title}
-      </Heading>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{blurb}</p>
-      <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-strong">
-        Open {title}
-        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-      </span>
-    </a>
-  );
-}
-
+/** Index cards pointing to related pages. */
 export function RelatedGrid({
   paths,
-  heading = "Keep exploring",
+  heading = "Continue reading",
 }: {
   paths: string[];
   heading?: string;
@@ -406,22 +727,26 @@ export function RelatedGrid({
     .filter((x): x is { path: string; info: { label: string; blurb: string } } => !!x.info);
   if (!items.length) return null;
   return (
-    <section className="relative bg-surface py-14 md:py-16">
-      <Container>
-        <h2 className="font-display text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-          {heading}
-        </h2>
-        <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="continue" aria-labelledby="continue-h">
+      <div className="wrap">
+        <h2 id="continue-h">{heading}</h2>
+        <ul className="cards">
           {items.map(({ path, info }) => (
-            <LinkCard key={path} href={path} title={info.label} blurb={info.blurb} />
+            <li key={path}>
+              <a href={path} className="index-card">
+                <span className="note">Next up</span>
+                <strong>{info.label}</strong>
+                <span>{info.blurb}</span>
+              </a>
+            </li>
           ))}
-        </div>
-      </Container>
+        </ul>
+      </div>
     </section>
   );
 }
 
-/** Closing conversion band, styled like the landing page finale. */
+/** Closing call to action: the page's assignment. */
 export function CtaBand({
   title = "Turn your next textbook chapter into a full lesson.",
   text = "Upload a textbook PDF and get a lesson plan built for your class length, a test paper with an answer key and assignments you can download as Word files. Free to start, no credit card needed.",
@@ -430,28 +755,17 @@ export function CtaBand({
   text?: string;
 }) {
   return (
-    <section className="relative overflow-hidden bg-background py-14 md:py-20">
-      <Container>
-        <div className="relative overflow-hidden rounded-3xl border border-brand/30 bg-card p-7 shadow-lift sm:p-12">
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -inset-24 rotate-3 zigzag [mask-image:linear-gradient(295deg,black_0%,black_22%,transparent_58%)] opacity-50" />
-            <div className="absolute inset-0 blueprint [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)] opacity-25" />
-          </div>
-          <div className="relative grid items-center gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-8">
-              <p className="eyebrow text-brand-strong!">Start free</p>
-              <h2 className="mt-3 font-display text-3xl leading-[1.1] font-extrabold tracking-tight text-ink sm:text-4xl">
-                {title}
-              </h2>
-              <p className="mt-4 max-w-2xl text-base text-muted-foreground sm:text-lg">{text}</p>
-            </div>
-            <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
-              <PrimaryCta />
-              <SecondaryCta href="/pricing">See pricing</SecondaryCta>
-            </div>
-          </div>
+    <section className="assignment" aria-labelledby="assignment-h">
+      <Image src="/mascot.webp" alt="" width={360} height={728} className="assignment-fox" />
+      <div className="wrap">
+        <p className="note assignment-kicker">Your assignment</p>
+        <h2 id="assignment-h">{title}</h2>
+        <p>{text}</p>
+        <div className="assignment-actions">
+          <PrimaryCta />
+          <SecondaryCta href="/pricing">See pricing</SecondaryCta>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }
